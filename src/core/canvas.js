@@ -1,4 +1,3 @@
-import { start } from "../chart/radial.polar.js";
 import { PI } from "./defaults.js";
 import { polarToCartesian } from "./utils.js";
 

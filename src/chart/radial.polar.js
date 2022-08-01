@@ -1,6 +1,6 @@
+import Chart from './radial.js'
 import { PI, doublePI, halfPI } from '../core/defaults.js';
-import { getDataLimits, normalizeFont, setCanvas, getSquareDrawingArea, getColorScheme, getBaseRadius } from '../core/helpers.js';
-import { displayLegend } from '../core/layout.js';
+import { getDataLimits, getBaseRadius } from '../core/helpers.js';
 import { abs } from '../core/utils.js';
 import { fillText, renderDiscSegment, fill, renderCircle, stroke, setStrokeStyle, setFillStyle, beginPath, fillRect } from '../core/canvas.js';
 
@@ -28,25 +28,19 @@ const displayData = (settings) => {
   }
 };
 
-export const start = (canvas, options) => {
-  const settings = Object.assign({}, options);
+export default class Polar extends Chart {
+  constructor(canvas, options) {
+    super(canvas, options);
 
-  settings.TYPE = '0';
-  settings.canvas = canvas;
-  settings.dpr = window.devicePixelRatio || 1;
-  settings.ctx = canvas.getContext('2d');
-  [settings.width, settings.height] = setCanvas(settings.canvas, settings.ctx, settings.dpr);
-  settings.colorScheme = getColorScheme(options.colorScheme);
+    this.settings.TYPE = '0';
 
-  settings.limits = getDataLimits(options.dataset.data);
-  settings.font = normalizeFont(options.font);
-  settings.legend = displayLegend(settings);
-  settings.drawingArea = getSquareDrawingArea(settings);
+    this.settings.radius = {};
+    this.settings.radius.inner = 0;
+    this.settings.radius.outer = this.settings.drawingArea.radius * 0.8;
+    this.settings.radius.base = getBaseRadius(this.settings);
 
-  settings.radius = {};
-  settings.radius.inner = 0;
-  settings.radius.outer = settings.drawingArea.radius * 0.8;
-  settings.radius.base = getBaseRadius(settings);
+    displayData(this.settings);
+  }
+}
 
-  displayData(settings);
-};
+Polar.prototype._getDataLimits = getDataLimits;

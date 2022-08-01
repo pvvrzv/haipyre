@@ -1,5 +1,7 @@
+import Chart from './radial.js';
+
 import { PI } from '../core/defaults.js';
-import { getDataLimits, normalizeFont, setCanvas, getLegendDimensions, getSquareDrawingAreaDimensions, getColorScheme, getRadarDataLimits, getBaseRadius } from '../core/helpers.js';
+import { normalizeFont, setCanvas, getColorScheme, getRadarDataLimits, getBaseRadius, getSquareDrawingArea } from '../core/helpers.js';
 import { displayLegend } from '../core/layout.js';
 import { fill, stroke, renderPolygon, moveTo, lineTo, closePath, beginPath, setStrokeStyle, setFillStyle, fillPath, strokePath, renderCircle, strokeRect, fillRect } from '../core/canvas.js';
 import { abs, polarToCartesian } from '../core/utils.js';
@@ -58,8 +60,8 @@ const displayData = (settings, coordinates) => {
     };
 
     closePath(path);
-    setFillStyle(settings.ctx, settings.dataset.data[i].background || settings.colorScheme.backgroundAlpha);
-    setStrokeStyle(settings.ctx, settings.dataset.data[i].border || settings.colorScheme.border);
+    setFillStyle(settings.ctx, settings.dataset.data[i].background || settings.colorScheme.data.backgroundAlpha);
+    setStrokeStyle(settings.ctx, settings.dataset.data[i].border || settings.colorScheme.data.border);
     fillPath(settings.ctx, path);
     strokePath(settings.ctx, path);
   });
@@ -72,27 +74,24 @@ const displayLayout = (settings) => {
   displayData(settings, pointCoordinates);
 };
 
-export const start = (canvas, options) => {
-  // add radius.distance for doughnut type of the chart
-  // fix limits distance
-  const settings = Object.assign({}, options);
+export default class Radar extends Chart {
 
-  settings.TYPE = 3;
-  settings.canvas = canvas;
-  settings.ctx = canvas.getContext('2d');
-  settings.dpr = window.devicePixelRatio || 1;
-  [settings.width, settings.height] = setCanvas(settings.canvas, settings.ctx, settings.dpr);
-  settings.colorScheme = getColorScheme(options.colorScheme);
-  settings.limits = getRadarDataLimits(options.dataset);
-  settings.font = normalizeFont(options.font);
-  settings.legend = getLegendDimensions(settings);
-  settings.legend.height = displayLegend(settings);
-  settings.drawingArea = getSquareDrawingAreaDimensions(settings);
+  constructor(canvas, options) {
+    super(canvas, options);
 
-  settings.radius = {};
-  settings.radius.inner = 0;
-  settings.radius.outer = settings.drawingArea.halfHeight;
-  settings.radius.base = getBaseRadius(settings);
+    this.TYPE = 3;
+    this.settings.radius = {};
+    this.settings.radius.inner = 0;
+    this.settings.radius.outer = this.settings.drawingArea.height / 2;
+    this.settings.radius.base = getBaseRadius(this.settings);
 
-  displayLayout(settings);
-};
+    displayLayout(this.settings);
+  }
+}
+
+Radar.prototype._setCanvas = setCanvas;
+Radar.prototype._getColorScheme = getColorScheme;
+Radar.prototype._normalizeFont = normalizeFont;
+Radar.prototype._getDataLimits = getRadarDataLimits;
+Radar.prototype._drawLegend = displayLegend;
+Radar.prototype._getDrawingArea = getSquareDrawingArea;

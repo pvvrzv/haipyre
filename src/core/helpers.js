@@ -1,9 +1,10 @@
 import { FONT, COLOR_SCHEME } from './defaults.js';
 
-export const getDataLimits = (data) => {
+export const getDataLimits = (dataset) => {
   const limits = { min: Number.POSITIVE_INFINITY, max: Number.NEGATIVE_INFINITY };
 
-  data.forEach(entry => {
+
+  dataset.data.forEach(entry => {
     if (entry.val < limits.min) limits.min = entry.val;
     else if (entry.val > limits.max) limits.max = entry.val;
   });
@@ -51,12 +52,12 @@ export const getRandomRgbColor = (min = 90, max = 200) => {
   return `rgb(${color})`;
 }
 
-export const setCanvas = (canvas, ctx, dpr) => {
-  const bounds = canvas.getBoundingClientRect();
+export const setCanvas = (settings) => {
+  const bounds = settings.canvas.getBoundingClientRect();
 
-  canvas.width = bounds.width * dpr;
-  canvas.height = bounds.height * dpr;
-  ctx.scale(dpr, dpr);
+  settings.canvas.width = bounds.width * settings.dpr;
+  settings.canvas.height = bounds.height * settings.dpr;
+  settings.ctx.scale(settings.dpr, settings.dpr);
 
   return [bounds.width, bounds.height];
 };
