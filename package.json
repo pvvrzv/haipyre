@@ -1,6 +1,6 @@
 {
   "scripts": {
-    "server": "browser-sync start -s"
+    "server": "browser-sync start -s -w ./src"
   },
   "devDependencies": {
     "browser-sync": "^2.27.10"
