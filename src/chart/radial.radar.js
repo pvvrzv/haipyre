@@ -11,7 +11,7 @@ const displayBackground = (settings) => {
   const startAngle = PI * -0.5;
   const angle = 2 * PI / settings.dataset.radarLabels.length;
 
-  settings.ctx.strokeStyle = settings.colorScheme.default;
+  setStrokeStyle(settings.ctx, settings.colorScheme.border);
 
   renderPolygon(settings.ctx, settings.drawingArea.center, settings.radius.outer, settings.dataset.radarLabels.length, startAngle);
 
@@ -48,7 +48,7 @@ const displayData = (settings, coordinates) => {
   coordinates.forEach((entry, i) => {
     const path = new Path2D();
     moveTo(path, entry[0]);
-    setFillStyle(settings.ctx, settings.dataset.data[i].border || settings.colorScheme.border);
+    setFillStyle(settings.ctx, settings.dataset.data[i].border || settings.colorScheme.data.border);
     beginPath(settings.ctx);
     renderCircle(settings.ctx, entry[0], 2);
     fill(settings.ctx);
