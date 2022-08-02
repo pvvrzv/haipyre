@@ -14,6 +14,7 @@ export const FONT = {
 
 export const COLOR_SCHEME = {
   background: 'rgb(255, 255, 255)',
+  border: 'rgb(181, 181, 181)',
   data: {
     background: 'rgb(191, 191, 191)',
     backgroundAlpha: 'rgba(191, 191, 191, 0.2)',
