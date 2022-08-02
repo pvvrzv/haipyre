@@ -1,22 +1,24 @@
 import Chart from './radial.js';
-import { PI } from '../core/defaults.js';
+import { PI, doublePI, halfPI } from '../core/defaults.js';
 import { getDataLimits } from '../core/data.js';
-import { renderDiscSegment, fill, stroke, setStrokeStyle } from '../core/canvas.js';
+import { renderDiscSegment, fill, stroke, setStrokeStyle, setFillStyle, beginPath } from '../core/canvas.js';
 import { abs } from '../core/utils.js';
 
 const displayData = (settings) => {
-  let startAngle = PI * -0.5;
+  let startAngle = -halfPI;
   let ratio = 0;
   let angle = 0;
   let i = 0;
-  settings.ctx.strokeStyle = settings.colorScheme.data.border;
+  setStrokeStyle(settings.ctx, settings.colorScheme.background);
 
   while (i < settings.dataset.data.length) {
     ratio = abs(settings.dataset.data[i].val) / settings.sum;
-    angle = 2 * PI * ratio + startAngle;
+    angle = doublePI * ratio + startAngle;
 
-    settings.ctx.fillStyle = settings.dataset.data[i].color || settings.colorScheme.data.background;
+    beginPath(settings.ctx);
     renderDiscSegment(settings.ctx, settings.drawingArea.center, settings.radius.outer, startAngle, angle);
+
+    setFillStyle(settings.ctx, settings.dataset.data[i].background || settings.colorScheme.data.background);
     fill(settings.ctx);
     stroke(settings.ctx);
 
@@ -40,4 +42,4 @@ export default class Pie extends Chart {
   }
 }
 
-Pie.prototype._getDataLimits = getDataLimits;
+Pie.prototype._getDataLimits = () => { };
