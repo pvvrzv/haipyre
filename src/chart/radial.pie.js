@@ -1,6 +1,6 @@
 import Chart from './radial.js';
 import { PI } from '../core/defaults.js';
-import { getDataLimits } from '../core/helpers.js';
+import { getDataLimits } from '../core/data.js';
 import { renderDiscSegment, fill, stroke, setStrokeStyle } from '../core/canvas.js';
 import { abs } from '../core/utils.js';
 
