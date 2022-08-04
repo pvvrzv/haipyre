@@ -32,6 +32,8 @@ export const renderPolygon = (ctx, coordinates, r, n, startAngle = 0) => {
   ctx.closePath();
 };
 
+export const rect = (ctx, coordinates, width, height) => ctx.rect(...coordinates, width, height);
+
 export const fillRect = (ctx, coordinates, width, height) => ctx.fillRect(...coordinates, width, height);
 
 export const strokeRect = (ctx, coordinates, width, height) => ctx.strokeRect(...coordinates, width, height);
