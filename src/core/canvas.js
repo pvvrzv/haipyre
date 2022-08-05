@@ -1,8 +1,8 @@
-import { PI } from "./defaults.js";
+import { PI, doublePI } from "./defaults.js";
 import { polarToCartesian } from "./utils.js";
 
 export const renderCircle = (ctx, coordinates, r) => {
-  ctx.arc(...coordinates, r, 0, 6.28, false);
+  ctx.arc(...coordinates, r, 0, doublePI, false);
 };
 
 export const renderDiscSegment = (ctx, coordinates, r, startAngle, endAngle) => {
