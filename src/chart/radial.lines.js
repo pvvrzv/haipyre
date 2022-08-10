@@ -2,10 +2,9 @@ import Chart from './radial.js';
 import { PI } from '../core/defaults.js';
 import { getDataLimits } from '../core/data.js';
 import { fill, stroke, renderCircle, renderCircleSegment, closePath, beginPath } from '../core/canvas.js';
-import { abs } from '../core/utils.js';
+import { abs } from '../utils/utils.js';
 
 const displayData = (settings) => {
-  console.log(settings)
 
   let startAngle = PI * - 0.5;
   let r2 = settings.radius.outer;

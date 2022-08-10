@@ -3,9 +3,8 @@ import Chart from './radial.js';
 import { PI } from '../core/defaults.js';
 import { getRadarDataLimits } from '../core/data.js';
 import { normalizeFont, setCanvas, getColorScheme, getBaseRadius, getSquareDrawingArea } from '../core/helpers.js';
-import { displayLegend } from '../core/layout.js';
 import { fill, stroke, renderPolygon, moveTo, lineTo, closePath, beginPath, setStrokeStyle, setFillStyle, fillPath, strokePath, renderCircle, strokeRect, fillRect } from '../core/canvas.js';
-import { abs, polarToCartesian } from '../core/utils.js';
+import { abs, polarToCartesian } from '../utils/utils.js';
 
 const displayBackground = (settings) => {
   const startAngle = PI * -0.5;
@@ -88,11 +87,14 @@ export default class Radar extends Chart {
 
     displayLayout(this.settings);
   }
+
+  resize() {
+
+  }
 }
 
 Radar.prototype._setCanvas = setCanvas;
 Radar.prototype._getColorScheme = getColorScheme;
 Radar.prototype._normalizeFont = normalizeFont;
 Radar.prototype._getDataLimits = getRadarDataLimits;
-Radar.prototype._drawLegend = displayLegend;
 Radar.prototype._getDrawingArea = getSquareDrawingArea;

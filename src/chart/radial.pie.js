@@ -1,8 +1,8 @@
 import Chart from './radial.js';
 import { PI, doublePI, halfPI } from '../core/defaults.js';
-import { getDataLimits } from '../core/data.js';
 import { renderDiscSegment, fill, stroke, setStrokeStyle, setFillStyle, beginPath } from '../core/canvas.js';
-import { abs } from '../core/utils.js';
+import { abs } from '../utils/utils.js';
+import { Tree } from '../utils/tree.js';
 
 const displayData = (settings) => {
   let startAngle = -halfPI;
@@ -34,11 +34,11 @@ export default class Pie extends Chart {
     this.settings.TYPE = '1';
     this.settings.sum = this.settings.dataset.data.reduce((a, b) => a + abs(b.val), 0);
 
-    this.settings.radius = {};
-    this.settings.radius.inner = 0;
-    this.settings.radius.outer = this.settings.drawingArea.height / 2;
+    // this.settings.radius = {};
+    // this.settings.radius.inner = 0;
+    // this.settings.radius.outer = this.settings.drawingArea.height / 2;
 
-    displayData(this.settings);
+    // displayData(this.settings);
   }
 }
 

@@ -23,32 +23,14 @@ export const getRandomRgbColor = (min = 90, max = 200) => {
   return `rgb(${color})`;
 }
 
-export const setCanvas = (settings) => {
-  const bounds = settings.canvas.getBoundingClientRect();
+export const setCanvas = (canvas, ctx, settings) => {
+  const bounds = canvas.getBoundingClientRect();
 
-  settings.canvas.width = bounds.width * settings.dpr;
-  settings.canvas.height = bounds.height * settings.dpr;
-  settings.ctx.scale(settings.dpr, settings.dpr);
+  canvas.width = bounds.width * settings.dpr;
+  canvas.height = bounds.height * settings.dpr;
+  ctx.scale(settings.dpr, settings.dpr);
 
   return [bounds.width, bounds.height];
-};
-
-export const getLegend = (settings) => {
-  const legend = {};
-
-  legend.unit = {};
-  legend.unit.height = settings.font.size * 0.65;
-  legend.unit.rect = settings.font.size * 2.25;
-  legend.unit.space = settings.font.size * 0.5;
-  legend.unit.margin = settings.font.size * 1;
-  legend.unit.halfHeight = legend.unit.height / 2;
-  legend.unit.withoutText = legend.unit.margin + legend.unit.space + legend.unit.rect;
-  legend.linePadding = settings.font.size * 0.5;
-  legend.maxHeight = settings.height * 0.35;
-  legend.width = settings.width * 0.95;
-  legend.height = undefined;
-
-  return legend;
 };
 
 export const getSquareDrawingArea = (settings) => {

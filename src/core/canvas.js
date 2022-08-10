@@ -1,5 +1,5 @@
 import { PI, doublePI } from "./defaults.js";
-import { polarToCartesian } from "./utils.js";
+import { polarToCartesian } from "../utils/utils.js";
 
 export const renderCircle = (ctx, coordinates, r) => {
   ctx.arc(...coordinates, r, 0, doublePI, false);
