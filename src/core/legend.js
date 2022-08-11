@@ -70,23 +70,26 @@ export const getLegend = (ctx, settings) => {
     }
 
     while (i < data.length) {
-      const label = data[i].label;
-      const textMeasurements = ctx.measureText(label);
+      const dataUnit = data[i];
+      const textMeasurements = ctx.measureText(dataUnit.label);
 
       const marker = new Rectangle(
         [x, y],
         standard.unit.marker.width,
         standard.unit.height,
-        { role: 'legendMarker' }
+        { role: 'legendMarker' },
+        {
+          background: dataUnit.background || settings.colorScheme.data.backgroundAlpha,
+          border: dataUnit.border || dataUnit.background || settings.colorScheme.data.background
+        }
       );
-
       const text = new Rectangle(
         [x + marker.width + standard.unit.text.margin.left, y],
-        label.width,
+        textMeasurements.width,
         standard.unit.height,
         {
           role: 'legendLabel',
-          content: label
+          content: dataUnit.label
         }
       );
 
@@ -99,7 +102,6 @@ export const getLegend = (ctx, settings) => {
 
       unit.addChild(marker);
       unit.addChild(text);
-      row.addChild(unit);
 
       x += unit.width + standard.unit.margin.right;
       i++;
@@ -109,19 +111,28 @@ export const getLegend = (ctx, settings) => {
         x -= unit.width + standard.unit.margin.right;
         break;
       }
+
+      row.addChild(unit);
     }
 
     row.width = x - standard.unit.margin.right - standard.margin.left;
     row.translate((legend.width - row.width) / 2, 0)
-    console.log(x)
     legend.addChild(row);
     x = standard.margin.left;
     y += row.height + standard.unit.margin.bottom;
   }
 
-  strokeRect(ctx, legend.origin, legend.width, legend.height);
+  legend.update(legend.width, y);
+
+  //
+  //
+  // DRAWING LEGEND. WILL BE REMOVED TO SEPARETE FUNCTION LATER
+  //
+  //
+
+  // strokeRect(ctx, legend.origin, legend.width, legend.height);
   legend.children.forEach((row) => {
-    strokeRect(ctx, row.origin, row.width, row.height);
+    // strokeRect(ctx, row.origin, row.width, row.height);
 
     if (!row.children) return;
 
@@ -130,8 +141,21 @@ export const getLegend = (ctx, settings) => {
 
       const marker = unit.children.head;
       const text = unit.children.tail;
+
+      setFillStyle(ctx, marker.colorScheme.background);
+      setStrokeStyle(ctx, marker.colorScheme.border);
       fillRect(ctx, marker.origin, marker.width, marker.height);
+      strokeRect(ctx, marker.origin, marker.width, marker.height);
+      setFillStyle(ctx, '#000000');
       fillText(ctx, text.meta.content, [text.origin[0], text.origin[1] + text.height]);
     });
   })
+
+  //
+  //
+  //
+  //
+  //
+
+  return legend;
 };
