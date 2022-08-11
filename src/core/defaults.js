@@ -1,8 +1,8 @@
 export const PI = 3.14;
 
-export const doublePI = 6.28;
+export const DOUBLE_PI = 6.28;
 
-export const halfPI = 1.57;
+export const HALF_PI = 1.57;
 
 export const FONT = {
   style: 'normal',
