@@ -1,5 +1,5 @@
 import Chart from './radial.js'
-import { PI, doublePI, halfPI } from '../core/defaults.js';
+import { PI, DOUBLE_PI, HALF_PI } from '../core/defaults.js';
 import { getDataLimits } from '../core/data.js';
 import { getBaseRadius } from '../core/helpers.js';
 import { abs } from '../utils/utils.js';

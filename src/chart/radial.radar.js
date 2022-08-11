@@ -2,7 +2,7 @@ import Chart from './radial.js';
 
 import { PI } from '../core/defaults.js';
 import { getRadarDataLimits } from '../core/data.js';
-import { normalizeFont, setCanvas, getColorScheme, getBaseRadius, getSquareDrawingArea } from '../core/helpers.js';
+import { normalizeFont, setCanvas, getColorScheme, getBaseRadius } from '../core/helpers.js';
 import { fill, stroke, renderPolygon, moveTo, lineTo, closePath, beginPath, setStrokeStyle, setFillStyle, fillPath, strokePath, renderCircle, strokeRect, fillRect } from '../core/canvas.js';
 import { abs, polarToCartesian } from '../utils/utils.js';
 
@@ -93,8 +93,4 @@ export default class Radar extends Chart {
   }
 }
 
-Radar.prototype._setCanvas = setCanvas;
-Radar.prototype._getColorScheme = getColorScheme;
-Radar.prototype._normalizeFont = normalizeFont;
 Radar.prototype._getDataLimits = getRadarDataLimits;
-Radar.prototype._getDrawingArea = getSquareDrawingArea;
