@@ -1,4 +1,4 @@
-import { doublePI } from "../core/defaults.js";
+import { DOUBLE_PI } from "../core/defaults.js";
 
 export const polarToCartesian = (a, origin = [0, 0], r = [1]) => {
   const sin = Math.sin(a);
@@ -24,7 +24,7 @@ export const getVectorAngle = (vector, origin = [0, 0]) => {
   const angle = Math.atan2(y, x);
 
   if (angle < 0) {
-    return angle + doublePI;
+    return angle + DOUBLE_PI;
   }
 
   return angle;
