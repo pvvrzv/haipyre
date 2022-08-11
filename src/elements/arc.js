@@ -3,7 +3,7 @@ import { getVectorAngle } from '../utils/utils.js';
 
 
 export default class Arc extends TreeNode {
-  constructor(origin, radius, sa, ea, colorScheme, meta = {}) {
+  constructor(origin, radius, sa, ea, meta, colorScheme = {}) {
     super();
 
     this.origin = origin;
@@ -16,11 +16,25 @@ export default class Arc extends TreeNode {
 
   scale(factor) {
     this.radius *= factor;
+
+    if (!this.children) return;
+    this.children.forEach((child) => { child.scale(factor) });
   }
 
   translate(x = 0, y = 0) {
     this.origin[0] += x;
     this.origin[1] += y;
+
+    if (!this.children) return;
+    this.children.forEach((child) => { child.translate(x, y) });
+  }
+
+  moveTo(x, y) {
+    this.origin[0] = x || this.origin[0];
+    this.origin[1] = y || this.origin[1];
+
+    if (!this.children) return;
+    this.children.forEach((child) => { child.moveTo(x, y) });
   }
 
   intersectsAngle(point) {

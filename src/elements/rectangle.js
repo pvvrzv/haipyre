@@ -14,12 +14,12 @@ import { TreeNode } from '../utils/tree.js';
 
 
 export default class Rectangle extends TreeNode {
-  constructor(origin, width, height, meta, colorScheme) {
+  constructor(origin, width, height, meta, colorScheme = {}) {
     super();
 
     this.width = width;
     this.height = height;
-    this.colorSheme = colorScheme;
+    this.colorScheme = colorScheme;
     this.meta = meta;
     this.origin = origin;
     this.diagonal = [
@@ -32,6 +32,11 @@ export default class Rectangle extends TreeNode {
     this.width *= factor;
     this.heigth *= factor;
 
+    this.diagonal = [
+      this.origin[0] + this.width,
+      this.origin[1] + this.height
+    ];
+
     if (!this.children) return;
     this.children.forEach((child) => { child.scale(factor) });
   }
@@ -42,6 +47,24 @@ export default class Rectangle extends TreeNode {
 
     if (!this.children) return;
     this.children.forEach((child) => { child.translate(x, y) });
+  }
+
+  moveTo(x, y) {
+    this.origin[0] = x || this.origin[0];
+    this.origin[1] = y || this.origin[1];
+
+    if (!this.children) return;
+    this.children.forEach((child) => { child.moveTo(x, y) });
+  }
+
+  update(width, height) {
+    this.width = width;
+    this.height = height;
+
+    this.diagonal = [
+      this.origin[0] + width,
+      this.origin[1] + height
+    ];
   }
 
   intersects(point) {

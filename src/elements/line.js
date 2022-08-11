@@ -1,7 +1,7 @@
 import { TreeNode } from '../utils/tree.js';
 
 class Line extends TreeNode {
-  constructor(origin, end, colorScheme, meta = {}) {
+  constructor(origin, end, meta, colorScheme = {}) {
     super();
 
     this.origin = origin;
@@ -19,5 +19,13 @@ class Line extends TreeNode {
     this.origin[1] += y;
     this.end[0] += x;
     this.end[1] += y;
+  }
+
+  moveTo(x, y) {
+    this.origin[0] = x || this.origin[0];
+    this.origin[1] = y || this.origin[1];
+
+    if (!this.children) return;
+    this.children.forEach((child) => { child.moveTo(x, y) });
   }
 }
