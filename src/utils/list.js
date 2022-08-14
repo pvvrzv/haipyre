@@ -78,16 +78,32 @@ export class List {
   }
 
   forEach(callback) {
-    if (this.length === 0) return
+    if (this.length === 0) return;
 
     let node = this.head;
     let i = 0;
 
     while (i < this.size) {
-      callback(node, i, this.head);
+      callback(node, i, this);
 
       node = node.next;
       i++;
     }
+  }
+
+  find(predicate) {
+    if (this.size === 0) return;
+
+    let node = this.head;
+    let i = 0;
+
+    while (i < this.size) {
+      if (predicate(node, i, this) === true) return node;
+
+      node = node.next;
+      i++;
+    };
+
+    return;
   }
 }
