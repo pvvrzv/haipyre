@@ -37,6 +37,10 @@ export default class Arc extends TreeNode {
     this.children.forEach((child) => { child.moveTo(x, y) });
   }
 
+  intersects(point) {
+    return this.intersectsRadius(point) && this.intersectsAngle(point);
+  }
+
   intersectsAngle(point) {
     const angle = getVectorAngle(point, this.origin);
     if (angle => this.startAngle && angle <= this.endAngle) {
