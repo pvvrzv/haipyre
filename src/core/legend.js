@@ -100,8 +100,8 @@ export const getLegend = (ctx, settings) => {
         { role: 'legendUnit' }
       )
 
-      unit.addChild(marker);
-      unit.addChild(text);
+      unit.addShadow(marker);
+      unit.addShadow(text);
 
       x += unit.width + standard.unit.margin.right;
       i++;
@@ -115,8 +115,8 @@ export const getLegend = (ctx, settings) => {
       row.addChild(unit);
     }
 
-    row.width = x - standard.unit.margin.right - standard.margin.left;
-    row.translate((legend.width - row.width) / 2, 0)
+    row.update(x - standard.unit.margin.right - standard.margin.left, row.height);
+    row.translate((legend.width - row.width) / 2, 0);
     legend.addChild(row);
     x = standard.margin.left;
     y += row.height + standard.unit.margin.bottom;
@@ -139,8 +139,8 @@ export const getLegend = (ctx, settings) => {
     row.children.forEach((unit) => {
       // strokeRect(ctx, unit.origin, unit.width, unit.height);
 
-      const marker = unit.children.head;
-      const text = unit.children.tail;
+      const marker = unit.shadow.head;
+      const text = unit.shadow.tail;
 
       setFillStyle(ctx, marker.colorScheme.background);
       setStrokeStyle(ctx, marker.colorScheme.border);
