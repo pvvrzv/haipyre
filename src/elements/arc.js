@@ -1,5 +1,5 @@
 import { TreeNode } from '../utils/tree.js';
-import { getVectorAngle } from '../utils/utils.js';
+import { getVectorAngle, moveVectorOrigin } from '../utils/utils.js';
 
 
 export default class Arc extends TreeNode {
@@ -17,43 +17,52 @@ export default class Arc extends TreeNode {
   scale(factor) {
     this.radius *= factor;
 
-    if (!this.children) return;
-    this.children.forEach((child) => { child.scale(factor) });
+    if (this.children) {
+      this.children.forEach((node) => { node.scale(scale) });
+    }
+
+    if (this.shadow) {
+      this.shadow.forEach((node) => { node.scale(scale) });
+    }
   }
 
   translate(x = 0, y = 0) {
     this.origin[0] += x;
     this.origin[1] += y;
 
-    if (!this.children) return;
-    this.children.forEach((child) => { child.translate(x, y) });
+    if (this.children) {
+      this.children.forEach((node) => { node.translate(x, y) });
+    }
+
+    if (this.shadow) {
+      this.shadow.forEach((node) => { node.translate(x, y) });
+    }
   }
 
   moveTo(x, y) {
     this.origin[0] = x || this.origin[0];
     this.origin[1] = y || this.origin[1];
 
-    if (!this.children) return;
-    this.children.forEach((child) => { child.moveTo(x, y) });
+    if (this.children) {
+      this.children.forEach((node) => { node.moveTo(x, y) });
+    }
+
+    if (this.shadow) {
+      this.shadow.forEach((node) => { node.moveTo(x, y) });
+    }
   }
 
   intersects(point) {
-    return this.intersectsRadius(point) && this.intersectsAngle(point);
+    const relativePoint = moveVectorOrigin(point, this.origin);
+    const angle = getVectorAngle(relativePoint);
+    return this.intersectsRadius(relativePoint) && this.intersectsAngle(angle);
   }
 
-  intersectsAngle(point) {
-    const angle = getVectorAngle(point, this.origin);
-    if (angle => this.startAngle && angle <= this.endAngle) {
-      return true;
-    }
-
-    return false;
+  intersectsAngle(angle) {
+    return angle >= this.startAngle && angle <= this.endAngle;
   }
 
   intersectsRadius(point) {
-    if (Math.hypot(...point) <= this.radius) {
-      return true;
-    }
-    return false;
+    return Math.hypot(...point) <= this.radius;
   }
 }
