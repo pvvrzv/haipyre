@@ -14,13 +14,12 @@ import { TreeNode } from '../utils/tree.js';
 
 
 export default class Rectangle extends TreeNode {
-  constructor(origin, width, height, meta, colorScheme = {}) {
-    super();
+  constructor(origin, width, height, meta = {}, colorScheme = {}) {
+    super(meta);
 
     this.width = width;
     this.height = height;
     this.colorScheme = colorScheme;
-    this.meta = meta;
     this.origin = origin;
     this.diagonal = [
       origin[0] + width,

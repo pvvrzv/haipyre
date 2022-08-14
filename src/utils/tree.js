@@ -1,8 +1,9 @@
 import { ListNode, List } from './list.js';
 
 export class TreeNode extends ListNode {
-  constructor(children = null, shadow = null) {
+  constructor(meta, children = null, shadow = null) {
     super();
+    this.meta = meta;
     this.parent = null;
     this.children = children;
     this.shadow = shadow;
@@ -48,7 +49,7 @@ export class TreeNode extends ListNode {
 }
 
 export class Tree extends TreeNode {
-  constructor() {
-    super();
+  constructor(meta = {}) {
+    super(meta);
   }
 }

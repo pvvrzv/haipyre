@@ -3,15 +3,14 @@ import { getVectorAngle, moveVectorOrigin } from '../utils/utils.js';
 
 
 export default class Arc extends TreeNode {
-  constructor(origin, radius, sa, ea, meta, colorScheme = {}) {
-    super();
+  constructor(origin, radius, sa, ea, meta = {}, colorScheme = {}) {
+    super(meta);
 
     this.origin = origin;
     this.radius = radius;
     this.startAngle = sa;
     this.endAngle = ea;
     this.colorScheme = colorScheme;
-    this.meta = meta;
   }
 
   scale(factor) {
