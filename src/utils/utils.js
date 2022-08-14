@@ -17,11 +17,9 @@ export const abs = (n) => Math.abs(n);
 
 export const isPointInLineSegment = (px, line) => px >= line[0] && px <= line[1] ? true : false;
 
-export const getVectorAngle = (vector, origin = [0, 0]) => {
+export const getVectorAngle = (vector) => {
   //clockwise
-  const x = vector[0] - origin[0];
-  const y = vector[1] - origin[1];
-  const angle = Math.atan2(y, x);
+  const angle = Math.atan2(vector[1], vector[0]);
 
   if (angle < 0) {
     return angle + DOUBLE_PI;
@@ -30,3 +28,10 @@ export const getVectorAngle = (vector, origin = [0, 0]) => {
   return angle;
 }
 
+export const moveVectorOrigin = (vector, origin) => {
+  //moves from [0,0] origin
+  const x = vector[0] - origin[0];
+  const y = vector[1] - origin[1];
+
+  return [x, y];
+}
