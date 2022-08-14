@@ -21,20 +21,14 @@ export default class Rectangle extends TreeNode {
     this.height = height;
     this.colorScheme = colorScheme;
     this.origin = origin;
-    this.diagonal = [
-      origin[0] + width,
-      origin[1] + height
-    ];
+    this._calculateDiagonal();
   };
 
   scale(factor) {
     this.width *= factor;
     this.heigth *= factor;
 
-    this.diagonal = [
-      this.origin[0] + this.width,
-      this.origin[1] + this.height
-    ];
+    this._calculateDiagonal();
 
     if (this.children) {
       this.children.forEach((node) => { node.scale(factor) });
@@ -49,6 +43,8 @@ export default class Rectangle extends TreeNode {
     this.origin[0] += x;
     this.origin[1] += y;
 
+    this._calculateDiagonal();
+
     if (this.children) {
       this.children.forEach((node) => { node.translate(x, y) });
     }
@@ -58,9 +54,11 @@ export default class Rectangle extends TreeNode {
     }
   }
 
-  moveTo(x, y) {
-    this.origin[0] = x || this.origin[0];
-    this.origin[1] = y || this.origin[1];
+  moveTo(x = 0, y = 0) {
+    this.origin[0] = x;
+    this.origin[1] = y;
+
+    this._calculateDiagonal();
 
     if (this.children) {
       this.children.forEach((node) => { node.moveTo(x, y) });
@@ -75,9 +73,13 @@ export default class Rectangle extends TreeNode {
     this.width = width;
     this.height = height;
 
+    this._calculateDiagonal();
+  }
+
+  _calculateDiagonal() {
     this.diagonal = [
-      this.origin[0] + width,
-      this.origin[1] + height
+      this.origin[0] + this.width,
+      this.origin[1] + this.height
     ];
   }
 
