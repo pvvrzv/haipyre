@@ -1,32 +1,82 @@
 import Chart from './radial.js'
-import { PI, DOUBLE_PI, HALF_PI } from '../core/defaults.js';
+import { DOUBLE_PI, HALF_PI, THREE_HALFS_PI } from '../core/defaults.js';
 import { getDataLimits } from '../core/data.js';
 import { getBaseRadius } from '../core/helpers.js';
-import { abs } from '../utils/utils.js';
-import { fillText, renderDiscSegment, fill, renderCircle, stroke, setStrokeStyle, setFillStyle, beginPath, fillRect } from '../core/canvas.js';
+import { renderDiscSegment, fill, stroke, setStrokeStyle, setFillStyle, beginPath } from '../core/canvas.js';
+import Arc from '../elements/arc.js';
+import { getEventListener, onMouseEnter, onMouseLeave } from '../core/events.js';
 
-const displayData = (settings) => {
-  const stepAngle = doublePI / settings.dataset.data.length;
-  let startAngle = -halfPI;
-  let currentAngle = 0;
+const getPolarChart = (ctx, legend, settings) => {
+  const width = settings.width;
+  const height = settings.height - legend.diagonal[1];
+  const d = Math.min(width, height) * 0.9;
+  const r = d / 2;
+  const data = settings.dataset.data;
+  const step = DOUBLE_PI / data.length;
+  const BASELINE = 20;
+
+  const chart = new Arc(
+    {
+      origin: [(width - d) / 2 + r, legend.diagonal[1] + r + 30],
+      radius: {
+        inner: 0,
+        outer: r,
+        base: getBaseRadius({ innter: 0, outer: r }, settings.limits)
+      },
+      startAngle: -HALF_PI,
+      endAngle: THREE_HALFS_PI,
+    },
+    {
+      role: 'chart'
+    }
+  );
+
+  let sa = -HALF_PI;
+  let ea = 0;
   let i = 0;
 
-  setStrokeStyle(settings.ctx, settings.colorScheme.background)
+  while (i < data.length) {
+    const ratio = data[i].val / settings.limits.distance;
+    const r = ratio * chart.radius.outer + chart.radius.base + BASELINE;
+    ea = sa + step;
 
-  while (i < settings.dataset.data.length) {
-    const ratio = settings.dataset.data[i].val / settings.limits.distance;
-    const r = settings.radius.base + settings.radius.outer * ratio;
-    currentAngle = startAngle + stepAngle;
+    const segment = new Arc(
+      {
+        origin: chart.origin,
+        radius: {
+          inner: 0,
+          outer: r
+        },
+        startAngle: sa,
+        endAngle: ea,
+      },
+      {
+        role: 'PolarChartSegmeng'
+      },
+      {
+        background: data[i].background || settings.colorScheme.data.background
+      }
+    );
 
-    setFillStyle(settings.ctx, settings.dataset.data[i].background || settings.colorScheme.data.background);
-    beginPath(settings.ctx);
-    renderDiscSegment(settings.ctx, settings.drawingArea.center, r, startAngle, currentAngle);
-    fill(settings.ctx);
-    stroke(settings.ctx);
+    segment.onMouseEnter = onMouseEnter;
+    segment.onMouseLeave = onMouseLeave;
 
-    startAngle = currentAngle;
+    chart.addChild(segment);
+
     i++;
+    sa = ea;
   }
+
+  setStrokeStyle(ctx, '#ffffff');
+  chart.children.forEach((seg, i, list) => {
+    beginPath(ctx);
+    setFillStyle(ctx, seg.colorScheme.background);
+    renderDiscSegment(ctx, seg.origin, seg.radius.outer, seg.startAngle, seg.endAngle);
+    fill(ctx);
+    stroke(ctx);
+  });
+
+  return chart;
 };
 
 export default class Polar extends Chart {
@@ -35,12 +85,10 @@ export default class Polar extends Chart {
 
     this.settings.TYPE = '0';
 
-    this.settings.radius = {};
-    this.settings.radius.inner = 0;
-    this.settings.radius.outer = this.settings.drawingArea.radius * 0.8;
-    this.settings.radius.base = getBaseRadius(this.settings);
+    this.chart = getPolarChart(this.ctx, this.legend, this.settings);
+    this.om.addChild(this.chart);
 
-    displayData(this.settings);
+    this.canvas.addEventListener('mousemove', getEventListener(this));
   }
 }
 

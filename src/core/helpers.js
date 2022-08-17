@@ -33,28 +33,12 @@ export const setCanvas = (canvas, ctx, settings) => {
   return [bounds.width, bounds.height];
 };
 
-export const getSquareDrawingArea = (settings) => {
-  const area = {};
-
-  area.height = settings.height - settings.legend.height;
-  area.width = area.height;
-
-  const x = (settings.width - area.width) / 2;
-  const y = settings.legend.height;
-
-  area.coordinates = [x, y];
-  area.radius = Math.trunc(area.height / 2);
-  area.center = [x + area.radius, y + area.radius];
-
-  return area;
-};
-
 export const getColorScheme = (userColorScheme) => {
   return Object.assign(COLOR_SCHEME, userColorScheme);
 };
 
-export const getBaseRadius = (settings) => {
-  if (settings.limits.min >= 0) return settings.radius.inner
-  else if (settings.limits.max <= 0) return settings.radius.outer;
-  else return -settings.limits.min / settings.limits.distance * settings.radius.outer;
+export const getBaseRadius = (radius, limits) => {
+  if (limits.min >= 0) return radius.inner
+  else if (limits.max <= 0) return radius.outer;
+  else return -limits.min / limits.distance * radius.outer;
 }

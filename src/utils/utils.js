@@ -1,4 +1,4 @@
-import { DOUBLE_PI } from "../core/defaults.js";
+import { DOUBLE_PI, HALF_PI } from "../core/defaults.js";
 
 export const polarToCartesian = (a, origin = [0, 0], r = [1]) => {
   const sin = Math.sin(a);
@@ -18,10 +18,10 @@ export const abs = (n) => Math.abs(n);
 export const isPointInLineSegment = (px, line) => px >= line[0] && px <= line[1] ? true : false;
 
 export const getVectorAngle = (vector) => {
-  //clockwise
+  //clockwise [-HALF_PI, THREE_HALFS_PI];
   const angle = Math.atan2(vector[1], vector[0]);
 
-  if (angle < 0) {
+  if (angle < -HALF_PI) {
     return angle + DOUBLE_PI;
   }
 

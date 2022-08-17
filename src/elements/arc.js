@@ -3,14 +3,14 @@ import { getVectorAngle, moveVectorOrigin } from '../utils/utils.js';
 
 
 export default class Arc extends TreeNode {
-  constructor(origin, radius, sa, ea, meta = {}, colorScheme = {}) {
+  constructor(parameters, meta = {}, colorScheme = {}) {
     super(meta);
 
-    this.origin = origin;
-    this.radius = radius;
-    this.startAngle = sa;
-    this.endAngle = ea;
+    this.origin = parameters.origin;
+    this.startAngle = parameters.startAngle;
+    this.endAngle = parameters.endAngle;
     this.colorScheme = colorScheme;
+    this.radius = parameters.radius;
   }
 
   scale(factor) {
@@ -38,9 +38,9 @@ export default class Arc extends TreeNode {
     }
   }
 
-  moveTo(x, y) {
-    this.origin[0] = x || this.origin[0];
-    this.origin[1] = y || this.origin[1];
+  moveTo(x = 0, y = 0) {
+    this.origin[0] = x;
+    this.origin[1] = y;
 
     if (this.children) {
       this.children.forEach((node) => { node.moveTo(x, y) });
@@ -53,15 +53,17 @@ export default class Arc extends TreeNode {
 
   intersects(point) {
     const relativePoint = moveVectorOrigin(point, this.origin);
+    const radius = Math.hypot(...relativePoint);
     const angle = getVectorAngle(relativePoint);
-    return this.intersectsRadius(relativePoint) && this.intersectsAngle(angle);
+
+    return this.intersectsRadius(radius) && this.intersectsAngle(angle);
   }
 
   intersectsAngle(angle) {
     return angle >= this.startAngle && angle <= this.endAngle;
   }
 
-  intersectsRadius(point) {
-    return Math.hypot(...point) <= this.radius;
+  intersectsRadius(radius) {
+    return radius >= this.radius.inner && radius <= this.radius.outer;
   }
 }

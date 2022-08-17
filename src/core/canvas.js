@@ -5,18 +5,15 @@ export const renderCircle = (ctx, coordinates, r) => {
   ctx.arc(...coordinates, r, 0, DOUBLE_PI, false);
 };
 
-export const renderDiscSegment = (ctx, coordinates, r, sa, ea, rotation) => {
+export const renderDiscSegment = (ctx, coordinates, r, sa, ea,) => {
   ctx.moveTo(...coordinates);
-  ctx.arc(...coordinates, r, sa + rotation, ea + rotation, false);
+  ctx.arc(...coordinates, r, sa, ea, false);
   ctx.closePath();
 };
 
 export const renderCircleSegment = (ctx, coordinates, r1, r2, sa, ea) => {
-  const startAngle = sa + rotation;
-  const endAngle = ea + rotation;
-
-  ctx.arc(...coordinates, r1, startAngle, endAngle, false);
-  ctx.arc(...coordinates, r2, endAngle, startAngle, true);
+  ctx.arc(...coordinates, r1, sa, ea, false);
+  ctx.arc(...coordinates, r2, ea, sa, true);
 };
 
 export const renderRectangle = (ctx, coordinates, width, height) => {

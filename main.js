@@ -4,7 +4,7 @@ const canvas = document.getElementById('canvas');
 
 const data = [
   { label: 'Jan.', val: 2, background: 'rgba(255, 99, 132)' },
-  { label: 'Feb.', val: 11 , background: 'rgba(255, 99, 132)'},
+  { label: 'Feb.', val: 11, background: 'rgba(255, 99, 132)' },
   { label: 'March', val: 15 },
   { label: 'Apr.', val: -5 },
   { label: 'May.', val: 8 },
@@ -30,4 +30,4 @@ const options = {
   }
 };
 
-const chart = new Pie(canvas, options)
+const chart = new Polar(canvas, options)

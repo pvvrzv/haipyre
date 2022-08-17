@@ -1,4 +1,11 @@
-import Arc from '../elements/arc.js';
+import Rectangle from '../elements/rectangle.js';
 
-export const getCircularDrawingArea = (settings) => {
-}
+export const getDrawingArea = (legend, settings, ratio) => {
+  const 
+  
+  return new Rectangle(
+    [0, legend.diagonal[1]],
+
+  )
+
+};

@@ -43,9 +43,11 @@ export const getLegend = (ctx, settings) => {
   const data = settings.dataset.data;
   const standard = getLegendStandardSizes(settings);
   const legend = new Rectangle(
-    [standard.margin.left, standard.margin.top],
-    standard.width,
-    standard.height,
+    {
+      origin: [standard.margin.left, standard.margin.top],
+      width: standard.width,
+      height: standard.height,
+    },
     { role: 'legend' }
   );
 
@@ -56,9 +58,11 @@ export const getLegend = (ctx, settings) => {
 
   while (y < standard.height && i < data.length) {
     const row = new Rectangle(
-      [x, y],
-      standard.width,
-      standard.unit.height,
+      {
+        origin: [x, y],
+        width: standard.width,
+        height: standard.unit.height,
+      },
       { role: 'legendRow' }
     );
 
@@ -74,19 +78,24 @@ export const getLegend = (ctx, settings) => {
       const textMeasurements = ctx.measureText(dataUnit.label);
 
       const marker = new Rectangle(
-        [x, y],
-        standard.unit.marker.width,
-        standard.unit.height,
+        {
+          origin: [x, y],
+          width: standard.unit.marker.width,
+          height: standard.unit.height,
+        },
         { role: 'legendMarker' },
         {
           background: dataUnit.background || settings.colorScheme.data.backgroundAlpha,
           border: dataUnit.border || dataUnit.background || settings.colorScheme.data.background
         }
       );
+
       const text = new Rectangle(
-        [x + marker.width + standard.unit.text.margin.left, y],
-        textMeasurements.width,
-        standard.unit.height,
+        {
+          origin: [x + marker.width + standard.unit.text.margin.left, y],
+          width: textMeasurements.width,
+          height: standard.unit.height,
+        },
         {
           role: 'legendLabel',
           content: dataUnit.label
@@ -94,11 +103,13 @@ export const getLegend = (ctx, settings) => {
       );
 
       const unit = new Rectangle(
-        [x, y],
-        marker.width + textMeasurements.width + standard.unit.text.margin.left,
-        standard.unit.height,
+        {
+          origin: [x, y],
+          width: marker.width + standard.unit.text.margin.left + text.width,
+          height: standard.unit.height,
+        },
         { role: 'legendUnit' }
-      )
+      );
 
       unit.addShadow(marker);
       unit.addShadow(text);
@@ -126,7 +137,7 @@ export const getLegend = (ctx, settings) => {
 
   //
   //
-  // DRAWING LEGEND. WILL BE REMOVED TO SEPARETE FUNCTION LATER
+  // DRAWING LEGEND. WILL BE REMOVED TO SEPARATE FUNCTION LATER
   //
   //
 
