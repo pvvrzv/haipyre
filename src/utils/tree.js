@@ -7,6 +7,9 @@ export class TreeNode extends ListNode {
     this.parent = null;
     this.children = children;
     this.shadow = shadow;
+
+    if (children) children.forEach((node) => node.parent = this);
+    if (shadow) shadow.forEach((node) => node.parent = this);
   }
 
   addChild(node) {
