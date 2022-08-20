@@ -51,7 +51,8 @@ const getPolarChart = (ctx, legend, settings) => {
         endAngle: ea,
       },
       {
-        role: 'PolarChartSegmeng'
+        role: 'PolarChartSegmeng',
+        value: data[i].val
       },
       {
         background: data[i].background || settings.colorScheme.data.background

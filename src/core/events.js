@@ -36,6 +36,8 @@ export const getEventListener = (target) => {
         return node.intersects(point);
       });
 
+      console.log(node.meta.role);
+
       if (node !== lastActive) {
         if (lastActive.onMouseLeave) lastActive.onMouseLeave(target.ctx);
         if (node.onMouseEnter) node.onMouseEnter(target.ctx);

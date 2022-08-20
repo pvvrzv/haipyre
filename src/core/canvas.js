@@ -20,13 +20,11 @@ export const renderRectangle = (ctx, coordinates, width, height) => {
   ctx.rect(...coordinates, width, height);
 };
 
-export const renderPolygon = (ctx, coordinates, r, n, startAngle) => {
-  const angle = 2 * PI / n;
-
+export const renderPolygon = (ctx, coordinates, r, step, startAngle) => {
   ctx.moveTo(...polarToCartesian(startAngle, coordinates, [r])[0]);
 
   for (let i = 1; i < n; i++) {
-    ctx.lineTo(...polarToCartesian(startAngle + angle * i, coordinates, [r])[0]);
+    ctx.lineTo(...polarToCartesian(startAngle + step * i, coordinates, [r])[0]);
   }
 
   ctx.closePath();

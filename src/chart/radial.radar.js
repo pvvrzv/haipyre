@@ -1,70 +1,83 @@
 import Chart from './radial.js';
 
-import { PI } from '../core/defaults.js';
+import { DOUBLE_PI, PI, HALF_PI, THREE_HALFS_PI } from '../core/defaults.js';
 import { getRadarDataLimits } from '../core/data.js';
 import { normalizeFont, setCanvas, getColorScheme, getBaseRadius } from '../core/helpers.js';
 import { fill, stroke, renderPolygon, moveTo, lineTo, closePath, beginPath, setStrokeStyle, setFillStyle, fillPath, strokePath, renderCircle, strokeRect, fillRect } from '../core/canvas.js';
 import { abs, polarToCartesian } from '../utils/utils.js';
+import Element from '../elements/abstract.js';
+import Arc from '../elements/arc.js';
+import Rectangle from '../elements/rectangle.js';
 
-const displayBackground = (settings) => {
-  const startAngle = PI * -0.5;
-  const angle = 2 * PI / settings.dataset.radarLabels.length;
+const getRadarChart = (ctx, legend, settings) => {
+  const MARKER_RADIUS = 5;
+  const MARKER_DIAMETER = MARKER_RADIUS * 2;
+  const width = settings.width;
+  const height = settings.height - legend.diagonal[1];
+  const d = Math.min(width, height) * 0.9;
+  const r = d / 2;
+  const step = DOUBLE_PI / settings.dataset.radarLabels;
+  const data = settings.dataset.data;
 
-  setStrokeStyle(settings.ctx, settings.colorScheme.border);
-
-  renderPolygon(settings.ctx, settings.drawingArea.center, settings.radius.outer, settings.dataset.radarLabels.length, startAngle);
-
-  settings.dataset.radarLabels.forEach((label, i) => {
-    const coordinates = polarToCartesian(startAngle + angle * i, settings.drawingArea.center, [settings.radius.outer]);
-    moveTo(settings.ctx, settings.drawingArea.center);
-    lineTo(settings.ctx, coordinates[0]);
-  });
-
-  stroke(settings.ctx);
-};
-
-const getPointCoordinates = (settings) => {
-  const startAngle = PI * -0.5;
-  const angle = PI * 2 / settings.dataset.radarLabels.length;
-  const coordinates = [];
-
-  settings.dataset.data.forEach((entry, i) => {
-    coordinates[i] = [];
-
-    for (let j = 0; j < settings.dataset.radarLabels.length; j++) {
-      if (entry.val[j] === undefined) coordinates[i].push(settings.drawingArea.center);
-      const ratio = entry.val[j] / settings.limits.distance;
-      const radius = settings.radius.base + settings.radius.outer * ratio;
-      const pointCoordinates = polarToCartesian(startAngle + angle * j, settings.drawingArea.center, [radius]);
-      coordinates[i].push(pointCoordinates[0]);
+  const chart = new Arc(
+    {
+      origin: [(width - d) / 2 + r, legend.diagonal[1] + r + 10],
+      radius: {
+        inner: 0,
+        outer: r,
+        base: getBaseRadius({ inner: 0, outer: r }, settings.limits)
+      },
+      startAngle: - HALF_PI,
+      endAngle: THREE_HALFS_PI,
+    },
+    {
+      role: 'chart'
     }
-  });
+  );
 
-  return coordinates;
-};
+  const coordinateSystem = new Element(
+    {
+      step: step
+    },
+    {
+      role: 'coordinateSystem'
+    }
+  )
 
-const displayData = (settings, coordinates) => {
-  coordinates.forEach((entry, i) => {
-    const path = new Path2D();
-    moveTo(path, entry[0]);
-    setFillStyle(settings.ctx, settings.dataset.data[i].border || settings.colorScheme.data.border);
-    beginPath(settings.ctx);
-    renderCircle(settings.ctx, entry[0], 2);
-    fill(settings.ctx);
+  chart.addShadow(coordinateSystem);
 
-    for (let j = 1; j < entry.length; j++) {
-      lineTo(path, entry[j]);
-      beginPath(settings.ctx);
-      renderCircle(settings.ctx, entry[j], 2);
-      fill(settings.ctx);
-    };
+  let i = 0;
+  let j = 0;
+  let angle = -HALF_PI;
 
-    closePath(path);
-    setFillStyle(settings.ctx, settings.dataset.data[i].background || settings.colorScheme.data.backgroundAlpha);
-    setStrokeStyle(settings.ctx, settings.dataset.data[i].border || settings.colorScheme.data.border);
-    fillPath(settings.ctx, path);
-    strokePath(settings.ctx, path);
-  });
+  while (i < data.length) {
+    const dataUnit = data[i];
+
+    while (j < dataUnit.length) {
+      const ratio = dataUnit.val[j] / settings.limits.distance;
+      const r = ratio * chart.radius.outer + chart.radius.base;
+      const coordinates = polarToCartesian(angle, chart.origin, [r]);
+
+      const marker = new Arc(
+        {
+          origin: [],
+          radius: {
+            inner: 0,
+            outer: MARKER_RADIUS,
+          }
+        },
+        {
+          role: 'marker'
+        }
+      )
+
+      j++;
+    }
+
+    i++;
+  }
+
+  return chart;
 };
 
 const displayLayout = (settings) => {
@@ -80,12 +93,8 @@ export default class Radar extends Chart {
     super(canvas, options);
 
     this.TYPE = 3;
-    this.settings.radius = {};
-    this.settings.radius.inner = 0;
-    this.settings.radius.outer = this.settings.drawingArea.height / 2;
-    this.settings.radius.base = getBaseRadius(this.settings);
 
-    displayLayout(this.settings);
+    this.chart = getRadarChart(this.ctx, this.legend, this.settings);
   }
 
   resize() {

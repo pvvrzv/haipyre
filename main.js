@@ -3,9 +3,9 @@ import { Pie, Lines, Radar, Polar } from './src/index.js';
 const canvas = document.getElementById('canvas');
 
 const data = [
-  { label: 'Jan.', val: 2, background: 'rgba(255, 99, 132)' },
-  { label: 'Feb.', val: 11, background: 'rgba(255, 99, 132)' },
-  { label: 'March', val: 15 },
+  { label: 'Jan.', val: -5, background: 'rgb(255, 99, 132)' },
+  { label: 'Feb.', val: 11, background: 'rgb(255, 99, 132)' },
+  { label: 'March', val: 15, },
   { label: 'Apr.', val: -5 },
   { label: 'May.', val: 8 },
   { label: 'June', val: 3 },
@@ -22,12 +22,13 @@ const radarData = [
   { label: 'Feb.', val: [0, 10, 15, 2, 1] },
   { label: 'Feb.', val: [3, 5, 2, 14], background: 'rgba(54, 162, 235, 0.2)', border: 'rgb(54, 162, 235)' },
 ];
+const radarLabels = ['running', 'cycling', 'sleeping', 'walking', 'juggle'];
 
 const options = {
   dataset: {
-    radarLabels: ['running', 'cycling', 'sleeping', 'walking', 'juggle'],
-    data: data
+    radarLabels: radarLabels,
+    data: radarData
   }
 };
 
-const chart = new Polar(canvas, options)
+const chart = new Radar(canvas, options)

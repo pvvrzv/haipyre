@@ -1,41 +1,77 @@
 import Chart from './radial.js';
-import { PI } from '../core/defaults.js';
+import { DOUBLE_PI, HALF_PI, THREE_HALFS_PI } from '../core/defaults.js';
 import { getDataLimits } from '../core/data.js';
-import { fill, stroke, renderCircle, renderCircleSegment, closePath, beginPath } from '../core/canvas.js';
+import { fill, stroke, renderCircle, renderCircleSegment, closePath, beginPath, setFillStyle } from '../core/canvas.js';
 import { abs } from '../utils/utils.js';
+import Arc from '../elements/arc.js';
 
-const displayData = (settings) => {
+const getLineChart = (ctx, legend, settings) => {
+  const width = settings.width;
+  const height = settings.height - legend.diagonal[1];
+  const d = Math.min(width, height) * 0.9;
+  const r = d / 2;
+  const data = settings.dataset.data;
+  const absMax = Math.max(settings.limits.max, abs(settings.limits.min));
+  const lineWidth = r / data.length * 0.9;
+  const linePadding = r / data.length * 0.1
 
-  let startAngle = PI * - 0.5;
-  let r2 = settings.radius.outer;
-  let r1 = r2 - settings.line.width;
-  let radius = settings.radius.outer - settings.line.width / 2;
-  let endAngle = 0;
+  const chart = new Arc(
+    {
+      origin: [(width - d) / 2 + r, legend.diagonal[1] + r + 10],
+      radius: {
+        inner: 0,
+        outer: r
+      },
+      startAngle: - HALF_PI,
+      endAngle: THREE_HALFS_PI,
+    },
+    {
+      role: 'chart'
+    }
+  );
+
+  let outer = chart.radius.outer;
+  let inner = outer - lineWidth;
+  let sa = -HALF_PI;
+  let ea = 0;
   let i = 0;
 
-  settings.ctx.strokeStyle = settings.colorScheme.stroke;
+  while (i < data.length) {
+    const ratio = data[i].val / absMax;
+    ea = sa + DOUBLE_PI * ratio;
 
-  while (i < settings.dataset.data.length) {
-    const ratio = settings.dataset.data[i].val / abs(settings.limits.max);
-    const angle = 2 * PI * ratio;
-    endAngle = startAngle + angle;
+    const segment = new Arc(
+      {
+        origin: chart.origin,
+        radius: {
+          inner: inner,
+          outer: outer
+        },
+        startAngle: sa > ea ? ea : sa,
+        endAngle: sa > ea ? sa : ea
+      },
+      {
+        role: 'LinesChartSegment'
+      },
+      {
+        background: data[i].background || settings.colorScheme.data.background
+      }
+    );
 
-    settings.ctx.fillStyle = settings.dataset.data[i].color || 'black';
-
-    beginPath(settings.ctx);
-    renderCircle(settings.ctx, settings.drawingArea.center, radius);
-    stroke(settings.ctx);
-
-    beginPath(settings.ctx);
-    if (settings.dataset.data[i].val > 0) renderCircleSegment(settings.ctx, settings.drawingArea.center, r1, r2, startAngle, endAngle);
-    if (settings.dataset.data[i].val <= 0) renderCircleSegment(settings.ctx, settings.drawingArea.center, r1, r2, endAngle, startAngle);
-    fill(settings.ctx);
-
-    r2 -= settings.radius.step;
-    r1 -= settings.radius.step;
-    radius -= settings.radius.step;
+    outer = inner - linePadding;
+    inner = outer - lineWidth;
     i++;
+    chart.addChild(segment);
   }
+
+  chart.children.forEach((seg, i, list) => {
+    beginPath(ctx);
+    setFillStyle(ctx, seg.colorScheme.background);
+    renderCircleSegment(ctx, seg.origin, seg.radius.outer, seg.radius.inner, seg.startAngle, seg.endAngle);
+    fill(ctx);
+  });
+
+  return chart;
 };
 
 export default class Lines extends Chart {
@@ -43,16 +79,8 @@ export default class Lines extends Chart {
     super(canvas, options);
 
     this.TYPE = 2;
-    this.settings.line = {};
-    this.settings.line.width = (this.settings.drawingArea.height / 2) / this.settings.dataset.data.length * 0.5;
 
-    this.settings.radius = {};
-    this.settings.radius.inner = (this.settings.drawingArea.height / 2) * 0.1;
-    this.settings.radius.outer = this.settings.drawingArea.height / 2;
-    this.settings.radius.distance = this.settings.radius.outer - this.settings.radius.inner;
-    this.settings.radius.step = (this.settings.radius.distance - this.settings.line.width) / this.settings.dataset.data.length;
-
-    displayData(this.settings);
+    this.chart = getLineChart(this.ctx, this.legend, this.settings);
   }
 }
 

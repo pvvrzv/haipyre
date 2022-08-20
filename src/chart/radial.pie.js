@@ -16,7 +16,7 @@ const getPieChart = (ctx, legend, settings) => {
     {
       origin: [(width - d) / 2 + r, legend.diagonal[1] + r + 10],
       radius: {
-        inner: 0,
+        inner: r * 0.3,
         outer: r
       },
       startAngle: - HALF_PI,
@@ -56,7 +56,7 @@ const getPieChart = (ctx, legend, settings) => {
 
     segment.onMouseEnter = onMouseEnter;
     segment.onMouseLeave = onMouseLeave;
-    
+
     chart.addChild(segment);
 
     sa = ea;
