@@ -1,5 +1,4 @@
 import Chart from './radial.js';
-
 import { DOUBLE_PI, PI, HALF_PI, THREE_HALFS_PI } from '../core/defaults.js';
 import { getRadarDataLimits } from '../core/data.js';
 import { normalizeFont, setCanvas, getColorScheme, getBaseRadius } from '../core/helpers.js';
@@ -8,6 +7,7 @@ import { abs, polarToCartesian } from '../utils/utils.js';
 import Element from '../elements/abstract.js';
 import Arc from '../elements/arc.js';
 import Rectangle from '../elements/rectangle.js';
+import { getEventListener } from '../core/events.js';
 
 const getRadarChart = (ctx, legend, settings) => {
   const MARKER_RADIUS = 5;
@@ -16,7 +16,7 @@ const getRadarChart = (ctx, legend, settings) => {
   const height = settings.height - legend.diagonal[1];
   const d = Math.min(width, height) * 0.9;
   const r = d / 2;
-  const step = DOUBLE_PI / settings.dataset.radarLabels;
+  const step = DOUBLE_PI / settings.dataset.radarLabels.length;
   const data = settings.dataset.data;
 
   const chart = new Arc(
@@ -48,34 +48,52 @@ const getRadarChart = (ctx, legend, settings) => {
 
   let i = 0;
   let j = 0;
-  let angle = -HALF_PI;
 
   while (i < data.length) {
-    const dataUnit = data[i];
+    let angle = -HALF_PI;
 
-    while (j < dataUnit.length) {
+    while (j < settings.dataset.radarLabels.length) {
+      const dataUnit = data[i];
       const ratio = dataUnit.val[j] / settings.limits.distance;
       const r = ratio * chart.radius.outer + chart.radius.base;
       const coordinates = polarToCartesian(angle, chart.origin, [r]);
 
       const marker = new Arc(
         {
-          origin: [],
+          origin: coordinates[0],
           radius: {
             inner: 0,
-            outer: MARKER_RADIUS,
-          }
+            outer: MARKER_RADIUS
+          },
+          startAngle: 0,
+          endAngle: DOUBLE_PI
         },
         {
-          role: 'marker'
+          role: 'radarChartMarker',
+          value: dataUnit.val[j]
+        },
+        {
+          background: dataUnit.background || settings.colorScheme.data.background
         }
-      )
+      );
 
+      chart.addChild(marker)
+
+      angle += step;
       j++;
     }
 
+    j = 0;
     i++;
   }
+
+  setFillStyle(ctx, '#000');
+
+  chart.children.forEach((marker, i) => {
+    beginPath(ctx);
+    renderCircle(ctx, marker.origin, marker.radius.outer);
+    fill(ctx);
+  });
 
   return chart;
 };
@@ -95,11 +113,12 @@ export default class Radar extends Chart {
     this.TYPE = 3;
 
     this.chart = getRadarChart(this.ctx, this.legend, this.settings);
+    this.om.addChild(this.chart);
+    renderCircle(this.ctx, this.chart.origin, this.chart.radius.outer);
+    stroke(this.ctx);
+    this.canvas.addEventListener('mousemove', getEventListener(this));
   }
 
-  resize() {
-
-  }
 }
 
 Radar.prototype._getDataLimits = getRadarDataLimits;

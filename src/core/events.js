@@ -10,10 +10,10 @@ export function onMouseEnter(ctx) {
 };
 
 export function onMouseLeave(ctx) {
-  beginPath(ctx);
-  setFillStyle(ctx, '#ffffff');
-  renderCircleSegment(ctx, this.origin, this.radius.outer + 4, this.radius.outer + 11, this.startAngle, this.endAngle);
-  fill(ctx);
+  // beginPath(ctx);
+  // setFillStyle(ctx, '#ffffff');
+  // renderCircleSegment(ctx, this.origin, this.radius.outer + 4, this.radius.outer + 11, this.startAngle, this.endAngle);
+  // fill(ctx);
 };
 
 export const getEventListener = (target) => {
@@ -23,22 +23,14 @@ export const getEventListener = (target) => {
   return (e) => {
     if (flag) return;
 
+    const point = [e.offsetX, e.offsetY];
+    const node = target.om.findLast((node) => {
+      return node.intersects(point);
+    });
+
     requestAnimationFrame(() => {
-      const point = [e.offsetX, e.offsetY];
-      const relativePoint = moveVectorOrigin(point, target.chart.origin);
-      const hyp = Math.hypot(...relativePoint);
-      const angle = getVectorAngle(relativePoint);
-
-      const node = target.om.findLast((node) => {
-        if (node instanceof Arc) {
-          return node.intersectsAngle(angle) && node.intersectsRadius(hyp);
-        }
-        return node.intersects(point);
-      });
-
-      console.log(node.meta.role);
-
       if (node !== lastActive) {
+        console.log(node.meta.role)
         if (lastActive.onMouseLeave) lastActive.onMouseLeave(target.ctx);
         if (node.onMouseEnter) node.onMouseEnter(target.ctx);
         lastActive = node;
