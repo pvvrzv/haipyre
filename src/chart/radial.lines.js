@@ -59,12 +59,15 @@ const getLineChart = (ctx, legend, settings) => {
     );
 
     i++;
+    outer -= (lineWidth + linePadding);
+    inner = outer - lineWidth;
     chart.addChild(segment);
   }
 
+
   chart.children.forEach((seg, i, list) => {
     beginPath(ctx);
-    setFillStyle(ctx, seg.colorScheme.background);
+    setFillStyle(ctx, seg.style.background);
     renderCircleSegment(ctx, seg.origin, seg.radius.outer, seg.radius.inner, seg.startAngle, seg.endAngle);
     fill(ctx);
   });
