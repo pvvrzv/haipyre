@@ -1,9 +1,9 @@
-import Chart from './radial.js';
+import Radial from './radial.js';
 import { DOUBLE_PI, HALF_PI, THREE_HALFS_PI } from '../core/defaults.js';
 import { renderDiscSegment, fill, stroke, setStrokeStyle, setFillStyle, beginPath, renderCircle, fillRect, renderCircleSegment, renderRectangle } from '../core/canvas.js';
 import { abs, getVectorAngle, moveVectorOrigin } from '../utils/utils.js';
 import Arc from '../elements/arc.js';
-import { getEventListener, onMouseEnter, onMouseLeave } from '../core/events.js';
+import { getEventListener } from '../core/events.js';
 
 const getPieChart = (ctx, legend, settings) => {
   const width = settings.width;
@@ -54,9 +54,6 @@ const getPieChart = (ctx, legend, settings) => {
       }
     );
 
-    segment.onMouseEnter = onMouseEnter;
-    segment.onMouseLeave = onMouseLeave;
-
     chart.addChild(segment);
 
     sa = ea;
@@ -75,7 +72,7 @@ const getPieChart = (ctx, legend, settings) => {
   return chart;
 };
 
-export default class Pie extends Chart {
+export default class Pie extends Radial {
   constructor(canvas, options) {
     super(canvas, options)
 

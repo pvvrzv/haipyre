@@ -1,4 +1,4 @@
-import Chart from './radial.js';
+import Radial from './radial.js';
 import { DOUBLE_PI, HALF_PI, THREE_HALFS_PI } from '../core/defaults.js';
 import { getDataLimits } from '../core/data.js';
 import { fill, stroke, renderCircle, renderCircleSegment, closePath, beginPath, setFillStyle } from '../core/canvas.js';
@@ -58,8 +58,6 @@ const getLineChart = (ctx, legend, settings) => {
       }
     );
 
-    outer = inner - linePadding;
-    inner = outer - lineWidth;
     i++;
     chart.addChild(segment);
   }
@@ -74,7 +72,7 @@ const getLineChart = (ctx, legend, settings) => {
   return chart;
 };
 
-export default class Lines extends Chart {
+export default class Lines extends Radial {
   constructor(canvas, options) {
     super(canvas, options);
 

@@ -4,7 +4,7 @@ import Rectangle from "../elements/rectangle.js";
 import { fillRect, strokeRect } from "../core/canvas.js";
 import { Tree } from "../utils/tree.js";
 
-export default class Chart {
+export default class Radial {
   constructor(canvas, options) {
     this.settings = Object.assign({}, options);
 

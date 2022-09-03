@@ -1,4 +1,4 @@
-import Chart from './radial.js';
+import Radial from './radial.js';
 import { DOUBLE_PI, PI, HALF_PI, THREE_HALFS_PI } from '../core/defaults.js';
 import { getRadarDataLimits } from '../core/data.js';
 import { normalizeFont, setCanvas, getColorScheme, getBaseRadius } from '../core/helpers.js';
@@ -105,7 +105,7 @@ const displayLayout = (settings) => {
   displayData(settings, pointCoordinates);
 };
 
-export default class Radar extends Chart {
+export default class Radar extends Radial {
 
   constructor(canvas, options) {
     super(canvas, options);

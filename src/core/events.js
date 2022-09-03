@@ -1,20 +1,5 @@
 import { moveVectorOrigin, getVectorAngle } from "../utils/utils.js";
 import Arc from "../elements/arc.js";
-import { beginPath, renderCircleSegment, renderCircle, fill, setFillStyle } from "./canvas.js";
-
-export function onMouseEnter(ctx) {
-  beginPath(ctx);
-  setFillStyle(ctx, this.colorScheme.background);
-  renderCircleSegment(ctx, this.origin, this.radius.outer + 5, this.radius.outer + 10, this.startAngle, this.endAngle);
-  fill(ctx);
-};
-
-export function onMouseLeave(ctx) {
-  // beginPath(ctx);
-  // setFillStyle(ctx, '#ffffff');
-  // renderCircleSegment(ctx, this.origin, this.radius.outer + 4, this.radius.outer + 11, this.startAngle, this.endAngle);
-  // fill(ctx);
-};
 
 export const getEventListener = (target) => {
   let flag = false;
