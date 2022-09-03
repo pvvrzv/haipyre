@@ -68,7 +68,7 @@ const getPolarChart = (ctx, legend, settings) => {
   setStrokeStyle(ctx, '#ffffff');
   chart.children.forEach((seg, i, list) => {
     beginPath(ctx);
-    setFillStyle(ctx, seg.colorScheme.background);
+    setFillStyle(ctx, seg.style.background);
     renderDiscSegment(ctx, seg.origin, seg.radius.outer, seg.startAngle, seg.endAngle);
     fill(ctx);
     stroke(ctx);

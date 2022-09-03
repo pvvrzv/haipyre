@@ -98,13 +98,6 @@ const getRadarChart = (ctx, legend, settings) => {
   return chart;
 };
 
-const displayLayout = (settings) => {
-  const pointCoordinates = getPointCoordinates(settings);
-
-  displayBackground(settings);
-  displayData(settings, pointCoordinates);
-};
-
 export default class Radar extends Radial {
 
   constructor(canvas, options) {

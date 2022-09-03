@@ -153,8 +153,8 @@ export const getLegend = (ctx, settings) => {
       const marker = unit.shadow.head;
       const text = unit.shadow.tail;
 
-      setFillStyle(ctx, marker.colorScheme.background);
-      setStrokeStyle(ctx, marker.colorScheme.border);
+      setFillStyle(ctx, marker.style.background);
+      setStrokeStyle(ctx, marker.style.border);
       fillRect(ctx, marker.origin, marker.width, marker.height);
       strokeRect(ctx, marker.origin, marker.width, marker.height);
       setFillStyle(ctx, '#000000');

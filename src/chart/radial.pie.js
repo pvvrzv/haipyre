@@ -63,7 +63,7 @@ const getPieChart = (ctx, legend, settings) => {
   setStrokeStyle(ctx, '#ffffff');
   chart.children.forEach((seg) => {
     beginPath(ctx);
-    setFillStyle(ctx, seg.colorScheme.background);
+    setFillStyle(ctx, seg.style.background);
     renderCircleSegment(ctx, seg.origin, seg.radius.inner, seg.radius.outer, seg.startAngle, seg.endAngle);
     fill(ctx);
     stroke(ctx);

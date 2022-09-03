@@ -1,12 +1,12 @@
 import { TreeNode } from '../utils/tree.js';
 
 class Line extends TreeNode {
-  constructor(parameters, meta = {}, colorScheme = {}) {
+  constructor(parameters, meta = {}, style = {}) {
     super(meta);
 
     this.origin = parameters.origin;
     this.end = parameters.end;
-    this.colorScheme = colorScheme;
+    this.style = style;
   }
 
   scale(factor) {

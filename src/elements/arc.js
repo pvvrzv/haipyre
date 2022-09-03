@@ -3,13 +3,13 @@ import { getVectorAngle, moveVectorOrigin } from '../utils/utils.js';
 
 
 export default class Arc extends TreeNode {
-  constructor(parameters, meta = {}, colorScheme = {}) {
+  constructor(parameters, meta = {}, style = {}) {
     super(meta);
 
     this.origin = parameters.origin;
     this.startAngle = parameters.startAngle;
     this.endAngle = parameters.endAngle;
-    this.colorScheme = colorScheme;
+    this.style = style;
     this.radius = parameters.radius;
   }
 
@@ -65,5 +65,9 @@ export default class Arc extends TreeNode {
 
   intersectsRadius(radius) {
     return radius >= this.radius.inner && radius <= this.radius.outer;
+  }
+
+  render (ctx) {
+
   }
 }
