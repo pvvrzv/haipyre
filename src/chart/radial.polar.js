@@ -21,10 +21,11 @@ const getPolarChart = (ctx, legend, settings) => {
       radius: {
         inner: 0,
         outer: r,
-        base: getBaseRadius({ innter: 0, outer: r }, settings.limits)
+        base: getBaseRadius({ innter: 0, outer: r }, settings.limits),
       },
       startAngle: -HALF_PI,
       endAngle: THREE_HALFS_PI,
+      visible: false
     },
     {
       role: 'chart'
@@ -37,7 +38,7 @@ const getPolarChart = (ctx, legend, settings) => {
 
   while (i < data.length) {
     const ratio = data[i].val / settings.limits.distance;
-    const r = ratio * chart.radius.outer + chart.radius.base + BASELINE;
+    const r = ratio * chart.radius.outer + chart.radius.base;
     ea = sa + step;
 
     const segment = new Arc(
@@ -55,7 +56,8 @@ const getPolarChart = (ctx, legend, settings) => {
         value: data[i].val
       },
       {
-        background: data[i].background || settings.colorScheme.data.background
+        background: data[i].background || settings.colorScheme.data.background,
+        border: '#fff'
       }
     );
 
@@ -65,14 +67,7 @@ const getPolarChart = (ctx, legend, settings) => {
     sa = ea;
   }
 
-  setStrokeStyle(ctx, '#ffffff');
-  chart.children.forEach((seg, i, list) => {
-    beginPath(ctx);
-    setFillStyle(ctx, seg.style.background);
-    renderDiscSegment(ctx, seg.origin, seg.radius.outer, seg.startAngle, seg.endAngle);
-    fill(ctx);
-    stroke(ctx);
-  });
+  chart.render(ctx);
 
   return chart;
 };

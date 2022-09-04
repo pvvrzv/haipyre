@@ -21,6 +21,7 @@ const getPieChart = (ctx, legend, settings) => {
       },
       startAngle: - HALF_PI,
       endAngle: THREE_HALFS_PI,
+      visible: false
     },
     {
       role: 'chart'
@@ -50,7 +51,8 @@ const getPieChart = (ctx, legend, settings) => {
         value: data[i].val
       },
       {
-        background: data[i].background || settings.colorScheme.data.background
+        background: data[i].background || settings.colorScheme.data.background,
+        border: '#fff'
       }
     );
 
@@ -60,15 +62,7 @@ const getPieChart = (ctx, legend, settings) => {
     i++;
   }
 
-  setStrokeStyle(ctx, '#ffffff');
-  chart.children.forEach((seg) => {
-    beginPath(ctx);
-    setFillStyle(ctx, seg.style.background);
-    renderCircleSegment(ctx, seg.origin, seg.radius.inner, seg.radius.outer, seg.startAngle, seg.endAngle);
-    fill(ctx);
-    stroke(ctx);
-  });
-
+  chart.render(ctx);
   return chart;
 };
 

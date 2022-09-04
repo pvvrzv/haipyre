@@ -1,4 +1,5 @@
 import Rectangle from '../elements/rectangle.js';
+import Text from '../elements/text.js';
 import { TreeNode } from '../utils/tree.js';
 import { fillText, setFillStyle, beginPath, fillRect, strokeRect, setStrokeStyle, fill } from './canvas.js';
 
@@ -47,6 +48,7 @@ export const getLegend = (ctx, settings) => {
       origin: [standard.margin.left, standard.margin.top],
       width: standard.width,
       height: standard.height,
+      visible: false
     },
     { role: 'legend' }
   );
@@ -62,6 +64,7 @@ export const getLegend = (ctx, settings) => {
         origin: [x, y],
         width: standard.width,
         height: standard.unit.height,
+        visible: false
       },
       { role: 'legendRow' }
     );
@@ -90,15 +93,18 @@ export const getLegend = (ctx, settings) => {
         }
       );
 
-      const text = new Rectangle(
+      const text = new Text(
         {
           origin: [x + marker.width + standard.unit.text.margin.left, y],
           width: textMeasurements.width,
           height: standard.unit.height,
+          content: dataUnit.label
         },
         {
-          role: 'legendLabel',
-          content: dataUnit.label
+          role: 'legendLabel'
+        },
+        {
+          color: '#000'
         }
       );
 
@@ -107,6 +113,7 @@ export const getLegend = (ctx, settings) => {
           origin: [x, y],
           width: marker.width + standard.unit.text.margin.left + text.width,
           height: standard.unit.height,
+          visible: false
         },
         { role: 'legendUnit' }
       );
@@ -135,38 +142,8 @@ export const getLegend = (ctx, settings) => {
 
   legend.update(legend.width, y);
 
-  //
-  //
-  // DRAWING LEGEND. WILL BE REMOVED TO SEPARATE FUNCTION LATER
-  //
-  //
-
-  // strokeRect(ctx, legend.origin, legend.width, legend.height);
-  legend.children.forEach((row) => {
-    // strokeRect(ctx, row.origin, row.width, row.height);
-
-    if (!row.children) return;
-
-    row.children.forEach((unit) => {
-      // strokeRect(ctx, unit.origin, unit.width, unit.height);
-
-      const marker = unit.shadow.head;
-      const text = unit.shadow.tail;
-
-      setFillStyle(ctx, marker.style.background);
-      setStrokeStyle(ctx, marker.style.border);
-      fillRect(ctx, marker.origin, marker.width, marker.height);
-      strokeRect(ctx, marker.origin, marker.width, marker.height);
-      setFillStyle(ctx, '#000000');
-      fillText(ctx, text.meta.content, [text.origin[0], text.origin[1] + text.height]);
-    });
-  })
-
-  //
-  //
-  //
-  //
-  //
+  ctx.textBaseline = 'top'
+  legend.render(ctx);
 
   return legend;
 };

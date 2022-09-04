@@ -20,13 +20,16 @@ const getLineChart = (ctx, legend, settings) => {
       origin: [(width - d) / 2 + r, legend.diagonal[1] + r + 10],
       radius: {
         inner: 0,
-        outer: r
+        outer: r,
       },
       startAngle: - HALF_PI,
       endAngle: THREE_HALFS_PI,
+      visible: false
     },
     {
       role: 'chart'
+    },
+    {
     }
   );
 
@@ -54,7 +57,8 @@ const getLineChart = (ctx, legend, settings) => {
         role: 'LinesChartSegment'
       },
       {
-        background: data[i].background || settings.colorScheme.data.background
+        background: data[i].background || settings.colorScheme.data.background,
+        border: 'transparent'
       }
     );
 
@@ -64,13 +68,7 @@ const getLineChart = (ctx, legend, settings) => {
     chart.addChild(segment);
   }
 
-
-  chart.children.forEach((seg, i, list) => {
-    beginPath(ctx);
-    setFillStyle(ctx, seg.style.background);
-    renderCircleSegment(ctx, seg.origin, seg.radius.outer, seg.radius.inner, seg.startAngle, seg.endAngle);
-    fill(ctx);
-  });
+  chart.render(ctx);
 
   return chart;
 };

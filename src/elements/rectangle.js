@@ -1,3 +1,4 @@
+import { beginPath, fillRect, setFillStyle, setStrokeStyle, strokeRect } from '../core/canvas.js';
 import { TreeNode } from '../utils/tree.js';
 
 // origin
@@ -20,6 +21,7 @@ export default class Rectangle extends TreeNode {
     this.width = parameters.width;
     this.height = parameters.height;
     this.origin = parameters.origin;
+    this.visible = parameters.visible === undefined ? true : parameters.visible;
     this.style = style;
     this.diagonal = [0, 0];
 
@@ -95,5 +97,18 @@ export default class Rectangle extends TreeNode {
 
   intersectsX(point) {
     return point[0] >= this.origin[0] && point[0] <= this.diagonal[0];
+  }
+
+  render(ctx) {
+    if (this.visible) {
+      beginPath(ctx);
+      setFillStyle(ctx, this.style.background);
+      setStrokeStyle(ctx, this.style.border);
+      fillRect(ctx, this.origin, this.width, this.height);
+      strokeRect(ctx, this.origin, this.width, this.height);
+    }
+
+    if (this.children) this.children.forEach((element) => element.render(ctx));
+    if (this.shadow) this.shadow.forEach((element) => element.render(ctx));
   }
 }

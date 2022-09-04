@@ -1,5 +1,6 @@
 import { TreeNode } from '../utils/tree.js';
 import { getVectorAngle, moveVectorOrigin } from '../utils/utils.js';
+import { beginPath, fill, renderCircleSegment, renderDiscSegment, setFillStyle, setStrokeStyle, stroke } from '../core/canvas.js';
 
 
 export default class Arc extends TreeNode {
@@ -11,6 +12,7 @@ export default class Arc extends TreeNode {
     this.endAngle = parameters.endAngle;
     this.style = style;
     this.radius = parameters.radius;
+    this.visible = parameters.visible === undefined ? true : parameters.visible;
   }
 
   scale(factor) {
@@ -67,7 +69,20 @@ export default class Arc extends TreeNode {
     return radius >= this.radius.inner && radius <= this.radius.outer;
   }
 
-  render (ctx) {
+  render(ctx) {
+    if (this.visible) {
+      beginPath(ctx);
+      setFillStyle(ctx, this.style.background);
+      setStrokeStyle(ctx, this.style.border);
 
+      if (this.radius.inner > 0) renderCircleSegment(ctx, this.origin, this.radius.outer, this.radius.inner, this.startAngle, this.endAngle);
+      else renderDiscSegment(ctx, this.origin, this.radius.outer, this.startAngle, this.endAngle);
+
+      fill(ctx);
+      stroke(ctx);
+    }
+
+    if (this.children) this.children.forEach((element) => element.render(ctx));
+    if (this.shadow) this.shadow.forEach((element) => element.render(ctx));
   }
 }
