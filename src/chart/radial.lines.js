@@ -68,7 +68,6 @@ const getLineChart = (ctx, legend, settings) => {
     chart.addChild(segment);
   }
 
-  chart.render(ctx);
 
   return chart;
 };
@@ -80,6 +79,7 @@ export default class Lines extends Radial {
     this.TYPE = 2;
 
     this.chart = getLineChart(this.ctx, this.legend, this.settings);
+    this.chart.render(this.ctx);
   }
 }
 

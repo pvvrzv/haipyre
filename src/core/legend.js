@@ -143,7 +143,6 @@ export const getLegend = (ctx, settings) => {
   legend.update(legend.width, y);
 
   ctx.textBaseline = 'top'
-  legend.render(ctx);
 
   return legend;
 };

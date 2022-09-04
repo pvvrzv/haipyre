@@ -87,14 +87,6 @@ const getRadarChart = (ctx, legend, settings) => {
     i++;
   }
 
-  setFillStyle(ctx, '#000');
-
-  chart.children.forEach((marker, i) => {
-    beginPath(ctx);
-    renderCircle(ctx, marker.origin, marker.radius.outer);
-    fill(ctx);
-  });
-
   return chart;
 };
 
@@ -107,8 +99,8 @@ export default class Radar extends Radial {
 
     this.chart = getRadarChart(this.ctx, this.legend, this.settings);
     this.om.addChild(this.chart);
-    renderCircle(this.ctx, this.chart.origin, this.chart.radius.outer);
-    stroke(this.ctx);
+    this.chart.render(this.ctx);
+
     this.canvas.addEventListener('mousemove', getEventListener(this));
   }
 

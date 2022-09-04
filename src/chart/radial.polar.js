@@ -67,8 +67,6 @@ const getPolarChart = (ctx, legend, settings) => {
     sa = ea;
   }
 
-  chart.render(ctx);
-
   return chart;
 };
 
@@ -80,8 +78,10 @@ export default class Polar extends Radial {
 
     this.chart = getPolarChart(this.ctx, this.legend, this.settings);
     this.om.addChild(this.chart);
-
+    this.chart.render(this.ctx);
+    
     this.canvas.addEventListener('mousemove', getEventListener(this));
+
   }
 }
 

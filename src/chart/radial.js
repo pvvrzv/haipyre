@@ -18,6 +18,7 @@ export default class Radial {
     this.settings.font = normalizeFont(options.font);
     this.legend = getLegend(this.ctx, this.settings);
     this.om.addChild(this.legend);
+    this.legend.render(this.ctx);
   }
 
   _getDataLimits() {

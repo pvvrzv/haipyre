@@ -62,7 +62,6 @@ const getPieChart = (ctx, legend, settings) => {
     i++;
   }
 
-  chart.render(ctx);
   return chart;
 };
 
@@ -77,6 +76,7 @@ export default class Pie extends Radial {
     this.chart = getPieChart(this.ctx, this.legend, this.settings);
 
     this.om.addChild(this.chart);
+    this.chart.render(this.ctx);
 
     this.canvas.addEventListener('mousemove', getEventListener(this));
   }
