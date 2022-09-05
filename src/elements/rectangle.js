@@ -72,12 +72,10 @@ export default class Rectangle extends Element {
   }
 
   _render(ctx) {
-    if (this.visible) {
-      beginPath(ctx);
-      setFillStyle(ctx, this.style.background);
-      setStrokeStyle(ctx, this.style.border);
-      fillRect(ctx, this.origin, this.width, this.height);
-      strokeRect(ctx, this.origin, this.width, this.height);
-    }
+    beginPath(ctx);
+    setFillStyle(ctx, this.style.background);
+    setStrokeStyle(ctx, this.style.border);
+    fillRect(ctx, this.origin, this.width, this.height);
+    strokeRect(ctx, this.origin, this.width, this.height);
   }
 }
