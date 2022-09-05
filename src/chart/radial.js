@@ -1,7 +1,5 @@
 import { setCanvas, getColorScheme, normalizeFont } from "../core/helpers.js";
 import { getLegend } from "../core/legend.js";
-import Rectangle from "../elements/rectangle.js";
-import { fillRect, strokeRect } from "../core/canvas.js";
 import { Tree } from "../utils/tree.js";
 
 export default class Radial {

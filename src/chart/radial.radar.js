@@ -1,12 +1,9 @@
 import Radial from './radial.js';
-import { DOUBLE_PI, PI, HALF_PI, THREE_HALFS_PI } from '../core/defaults.js';
+import { DOUBLE_PI, HALF_PI, THREE_HALFS_PI } from '../core/defaults.js';
 import { getRadarDataLimits } from '../core/data.js';
-import { normalizeFont, setCanvas, getColorScheme, getBaseRadius } from '../core/helpers.js';
-import { fill, stroke, renderPolygon, moveTo, lineTo, closePath, beginPath, setStrokeStyle, setFillStyle, fillPath, strokePath, renderCircle, strokeRect, fillRect } from '../core/canvas.js';
-import { abs, polarToCartesian } from '../utils/utils.js';
-import Element from '../elements/abstract.js';
+import { getBaseRadius } from '../core/helpers.js';
+import { polarToCartesian } from '../utils/utils.js';
 import Arc from '../elements/arc.js';
-import Rectangle from '../elements/rectangle.js';
 import { getEventListener } from '../core/events.js';
 
 const getRadarChart = (ctx, legend, settings) => {

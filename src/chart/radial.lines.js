@@ -1,7 +1,6 @@
 import Radial from './radial.js';
 import { DOUBLE_PI, HALF_PI, THREE_HALFS_PI } from '../core/defaults.js';
 import { getDataLimits } from '../core/data.js';
-import { fill, stroke, renderCircle, renderCircleSegment, closePath, beginPath, setFillStyle } from '../core/canvas.js';
 import { abs } from '../utils/utils.js';
 import Arc from '../elements/arc.js';
 

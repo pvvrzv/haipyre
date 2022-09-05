@@ -1,7 +1,6 @@
 import Radial from './radial.js';
 import { DOUBLE_PI, HALF_PI, THREE_HALFS_PI } from '../core/defaults.js';
-import { renderDiscSegment, fill, stroke, setStrokeStyle, setFillStyle, beginPath, renderCircle, fillRect, renderCircleSegment, renderRectangle } from '../core/canvas.js';
-import { abs, getVectorAngle, moveVectorOrigin } from '../utils/utils.js';
+import { abs } from '../utils/utils.js';
 import Arc from '../elements/arc.js';
 import { getEventListener } from '../core/events.js';
 
@@ -79,6 +78,23 @@ export default class Pie extends Radial {
     this.chart.render(this.ctx);
 
     this.canvas.addEventListener('mousemove', getEventListener(this));
+
+    // const observer = new ResizeObserver(() => {
+    //   this.resize();
+    //   this.ctx.clearRect(0, 0, this.settings.width, this.settings.height);
+    //   this.legend.render(this.ctx);
+    //   this.chart.render(this.ctx);
+    // });
+
+    // observer.observe(this.canvas);
+  }
+
+  resize() {
+    const rect = this.canvas.getBoundingClientRect();
+    const factor = Math.min(rect.width / this.settings.width, rect.height / this.settings.height);
+    this.settings.width = rect.width;
+    this.settings.heigth = rect.heigth;
+    this.chart.scale(factor);
   }
 }
 
