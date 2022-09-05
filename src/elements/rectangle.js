@@ -1,6 +1,5 @@
 import { beginPath, fillRect, setFillStyle, setStrokeStyle, strokeRect } from '../core/canvas.js';
-import { TreeNode } from '../utils/tree.js';
-
+import Element from './element.js';
 // origin
 //        +-------+
 //        |\      |
@@ -14,63 +13,36 @@ import { TreeNode } from '../utils/tree.js';
 //                   diagonal
 
 
-export default class Rectangle extends TreeNode {
+export default class Rectangle extends Element {
   constructor(parameters, meta = {}, style = {}) {
-    super(meta);
+    super(parameters, meta, style);
 
     this.width = parameters.width;
     this.height = parameters.height;
-    this.origin = parameters.origin;
-    this.visible = parameters.visible === undefined ? true : parameters.visible;
-    this.style = style;
     this.diagonal = [0, 0];
 
     this._calculateDiagonal();
   };
 
-  scale(factor) {
+  _scale(factor) {
     this.width *= factor;
     this.heigth *= factor;
 
     this._calculateDiagonal();
-
-    if (this.children) {
-      this.children.forEach((node) => { node.scale(factor) });
-    }
-
-    if (this.shadow) {
-      this.shadow.forEach((node) => { node.scale(factor) });
-    }
   }
 
-  translate(x = 0, y = 0) {
+  _translate(x = 0, y = 0) {
     this.origin[0] += x;
     this.origin[1] += y;
 
     this._calculateDiagonal();
-
-    if (this.children) {
-      this.children.forEach((node) => { node.translate(x, y) });
-    }
-
-    if (this.shadow) {
-      this.shadow.forEach((node) => { node.translate(x, y) });
-    }
   }
 
-  moveTo(x = 0, y = 0) {
+  _moveTo(x = 0, y = 0) {
     this.origin[0] = x;
     this.origin[1] = y;
 
     this._calculateDiagonal();
-
-    if (this.children) {
-      this.children.forEach((node) => { node.moveTo(x, y) });
-    }
-
-    if (this.shadow) {
-      this.shadow.forEach((node) => { node.moveTo(x, y) });
-    }
   }
 
   update(width, height) {
@@ -99,7 +71,7 @@ export default class Rectangle extends TreeNode {
     return point[0] >= this.origin[0] && point[0] <= this.diagonal[0];
   }
 
-  render(ctx) {
+  _render(ctx) {
     if (this.visible) {
       beginPath(ctx);
       setFillStyle(ctx, this.style.background);
@@ -107,8 +79,5 @@ export default class Rectangle extends TreeNode {
       fillRect(ctx, this.origin, this.width, this.height);
       strokeRect(ctx, this.origin, this.width, this.height);
     }
-
-    if (this.children) this.children.forEach((element) => element.render(ctx));
-    if (this.shadow) this.shadow.forEach((element) => element.render(ctx));
   }
 }

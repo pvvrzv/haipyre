@@ -8,7 +8,7 @@ export default class Text extends Rectangle {
     this.content = parameters.content;
   }
 
-  render(ctx) {
+  _render(ctx) {
     setFillStyle(ctx, this.style.color);
     fillText(ctx, this.content, this.origin);
   }
