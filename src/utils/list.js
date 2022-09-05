@@ -1,10 +1,3 @@
-export class ListNode {
-  constructor() {
-    this.prev = null;
-    this.next = null;
-  }
-}
-
 export class List {
   constructor() {
     this.head = null;

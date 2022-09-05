@@ -1,12 +1,13 @@
-import { ListNode, List } from './list.js';
+import { List } from './list.js';
 
-export class TreeNode extends ListNode {
+export class TreeNode {
   constructor(meta, children = null, shadow = null) {
-    super();
     this.meta = meta;
     this.parent = null;
     this.children = children;
     this.shadow = shadow;
+    this.prev = null;
+    this.next = null;
 
     if (children) children.forEach((node) => node.parent = this);
     if (shadow) shadow.forEach((node) => node.parent = this);
