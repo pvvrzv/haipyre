@@ -11,8 +11,8 @@ const getLineChart = (ctx, legend, settings) => {
   const r = d / 2;
   const data = settings.dataset.data;
   const absMax = Math.max(settings.limits.max, abs(settings.limits.min));
-  const lineWidth = r / data.length * 0.9;
-  const linePadding = r / data.length * 0.1
+  const lineWidth = (r / data.length) * 0.9;
+  const linePadding = (r / data.length) * 0.1;
 
   const chart = new Arc(
     {
@@ -21,15 +21,14 @@ const getLineChart = (ctx, legend, settings) => {
         inner: 0,
         outer: r,
       },
-      startAngle: - HALF_PI,
+      startAngle: -HALF_PI,
       endAngle: THREE_HALFS_PI,
-      visible: false
+      visible: false,
     },
     {
-      role: 'chart'
+      role: 'chart',
     },
-    {
-    }
+    {}
   );
 
   let outer = chart.radius.outer;
@@ -47,26 +46,25 @@ const getLineChart = (ctx, legend, settings) => {
         origin: chart.origin,
         radius: {
           inner: inner,
-          outer: outer
+          outer: outer,
         },
         startAngle: sa > ea ? ea : sa,
-        endAngle: sa > ea ? sa : ea
+        endAngle: sa > ea ? sa : ea,
       },
       {
-        role: 'LinesChartSegment'
+        role: 'LinesChartSegment',
       },
       {
         background: data[i].background || settings.colorScheme.data.background,
-        border: 'transparent'
+        border: 'transparent',
       }
     );
 
     i++;
-    outer -= (lineWidth + linePadding);
+    outer -= lineWidth + linePadding;
     inner = outer - lineWidth;
     chart.addChild(segment);
   }
-
 
   return chart;
 };

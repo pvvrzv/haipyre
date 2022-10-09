@@ -1,6 +1,6 @@
-import { setCanvas, getColorScheme, normalizeFont } from "../core/helpers.js";
-import { getLegend } from "../core/legend.js";
-import { Tree } from "../utils/tree.js";
+import { setCanvas, getColorScheme, normalizeFont } from '../core/helpers.js';
+import { getLegend } from '../core/legend.js';
+import { Tree } from '../utils/tree.js';
 
 export default class Radial {
   constructor(canvas, options) {
@@ -9,11 +9,17 @@ export default class Radial {
     this.canvas = canvas;
     this.ctx = canvas.getContext('2d');
     this.om = new Tree({ role: 'canvas' });
+
     this.settings.dpr = window.devicePixelRatio || 1;
     this.settings.limits = this._getDataLimits(options.dataset);
-    [this.settings.width, this.settings.height] = setCanvas(this.canvas, this.ctx, this.settings);
+    [this.settings.width, this.settings.height] = setCanvas(
+      this.canvas,
+      this.ctx,
+      this.settings
+    );
     this.settings.colorScheme = getColorScheme(options.colorScheme);
     this.settings.font = normalizeFont(options.font);
+
     this.legend = getLegend(this.ctx, this.settings);
     this.om.addChild(this.legend);
     this.legend.render(this.ctx);
@@ -21,5 +27,5 @@ export default class Radial {
 
   _getDataLimits() {
     throw new Error('Call for an abstract method!');
-  };
-};  
+  }
+}

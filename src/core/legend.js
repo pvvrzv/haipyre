@@ -1,7 +1,5 @@
 import Rectangle from '../elements/rectangle.js';
 import Text from '../elements/text.js';
-import { TreeNode } from '../utils/tree.js';
-import { fillText, setFillStyle, beginPath, fillRect, strokeRect, setStrokeStyle, fill } from './canvas.js';
 
 const getLegendStandardSizes = (settings) => {
   const unit = {
@@ -10,35 +8,34 @@ const getLegendStandardSizes = (settings) => {
     },
     text: {
       margin: {
-        left: 0.5 * settings.font.size
-      }
+        left: 0.5 * settings.font.size,
+      },
     },
     margin: {
       right: 1 * settings.font.size,
-      bottom: 0.5 * settings.font.size
+      bottom: 0.5 * settings.font.size,
     },
 
-    height: 0.65 * settings.font.size
+    height: 0.65 * settings.font.size,
   };
 
   const margin = {
     top: 0.5 * settings.font.size,
     right: 2 * settings.font.size,
-    left: 2 * settings.font.size
+    left: 2 * settings.font.size,
   };
 
   const width = settings.width - margin.right - margin.left;
 
   const height = settings.height * 0.35 - margin.top;
 
-
   return {
     unit,
     margin,
     width,
-    height
-  }
-}
+    height,
+  };
+};
 
 export const getLegend = (ctx, settings) => {
   const data = settings.dataset.data;
@@ -48,7 +45,7 @@ export const getLegend = (ctx, settings) => {
       origin: [standard.margin.left, standard.margin.top],
       width: standard.width,
       height: standard.height,
-      visible: false
+      visible: false,
     },
     { role: 'legend' }
   );
@@ -64,7 +61,7 @@ export const getLegend = (ctx, settings) => {
         origin: [x, y],
         width: standard.width,
         height: standard.unit.height,
-        visible: false
+        visible: false,
       },
       { role: 'legendRow' }
     );
@@ -88,8 +85,12 @@ export const getLegend = (ctx, settings) => {
         },
         { role: 'legendMarker' },
         {
-          background: dataUnit.background || settings.colorScheme.data.backgroundAlpha,
-          border: dataUnit.border || dataUnit.background || settings.colorScheme.data.background
+          background:
+            dataUnit.background || settings.colorScheme.data.backgroundAlpha,
+          border:
+            dataUnit.border ||
+            dataUnit.background ||
+            settings.colorScheme.data.background,
         }
       );
 
@@ -98,13 +99,13 @@ export const getLegend = (ctx, settings) => {
           origin: [x + marker.width + standard.unit.text.margin.left, y],
           width: textMeasurements.width,
           height: standard.unit.height,
-          content: dataUnit.label
+          content: dataUnit.label,
         },
         {
-          role: 'legendLabel'
+          role: 'legendLabel',
         },
         {
-          color: '#000'
+          color: '#000',
         }
       );
 
@@ -113,7 +114,7 @@ export const getLegend = (ctx, settings) => {
           origin: [x, y],
           width: marker.width + standard.unit.text.margin.left + text.width,
           height: standard.unit.height,
-          visible: false
+          visible: false,
         },
         { role: 'legendUnit' }
       );
@@ -133,7 +134,10 @@ export const getLegend = (ctx, settings) => {
       row.addChild(unit);
     }
 
-    row.update(x - standard.unit.margin.right - standard.margin.left, row.height);
+    row.update(
+      x - standard.unit.margin.right - standard.margin.left,
+      row.height
+    );
     row.translate((legend.width - row.width) / 2, 0);
     legend.addChild(row);
     x = standard.margin.left;
@@ -142,7 +146,7 @@ export const getLegend = (ctx, settings) => {
 
   legend.update(legend.width, y);
 
-  ctx.textBaseline = 'top'
+  ctx.textBaseline = 'top';
 
   return legend;
 };

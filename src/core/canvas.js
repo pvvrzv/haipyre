@@ -1,11 +1,11 @@
-import { PI, DOUBLE_PI } from "./defaults.js";
-import { polarToCartesian } from "../utils/utils.js";
+import { PI, DOUBLE_PI } from './defaults.js';
+import { polarToCartesian } from '../utils/utils.js';
 
 export const renderCircle = (ctx, coordinates, r) => {
   ctx.arc(...coordinates, r, 0, DOUBLE_PI, false);
 };
 
-export const renderDiscSegment = (ctx, coordinates, r, sa, ea,) => {
+export const renderDiscSegment = (ctx, coordinates, r, sa, ea) => {
   ctx.moveTo(...coordinates);
   ctx.arc(...coordinates, r, sa, ea, false);
   ctx.closePath();
@@ -14,27 +14,34 @@ export const renderDiscSegment = (ctx, coordinates, r, sa, ea,) => {
 export const renderCircleSegment = (ctx, coordinates, ro, ri, sa, ea) => {
   ctx.arc(...coordinates, ro, sa, ea, false);
   ctx.arc(...coordinates, ri, ea, sa, true);
+  ctx.closePath();
 };
 
 export const renderRectangle = (ctx, coordinates, width, height) => {
   ctx.rect(...coordinates, width, height);
 };
 
-export const renderPolygon = (ctx, coordinates, r, step, startAngle) => {
-  ctx.moveTo(...polarToCartesian(startAngle, coordinates, [r])[0]);
+// export const renderPolygon = (ctx, coordinates, r, n, startAngle) => {
+//   ctx.moveTo(...polarToCartesian(startAngle, coordinates, [r])[0]);
 
-  for (let i = 1; i < n; i++) {
-    ctx.lineTo(...polarToCartesian(startAngle + step * i, coordinates, [r])[0]);
-  }
+//   for (let i = 1; i < n; i++) {
+//     ctx.lineTo(...polarToCartesian(startAngle + step * i, coordinates, [r])[0]);
+//   }
 
-  ctx.closePath();
-};
+//   ctx.closePath();
+// };
 
-export const rect = (ctx, coordinates, width, height) => ctx.rect(...coordinates, width, height);
+export const roundRect = (ctx, coordinates, width, height, radii) =>
+  ctx.roundRect(...coordinates, width, height, radii);
 
-export const fillRect = (ctx, coordinates, width, height) => ctx.fillRect(...coordinates, width, height);
+export const rect = (ctx, coordinates, width, height) =>
+  ctx.rect(...coordinates, width, height);
 
-export const strokeRect = (ctx, coordinates, width, height) => ctx.strokeRect(...coordinates, width, height);
+export const fillRect = (ctx, coordinates, width, height) =>
+  ctx.fillRect(...coordinates, width, height);
+
+export const strokeRect = (ctx, coordinates, width, height) =>
+  ctx.strokeRect(...coordinates, width, height);
 
 export const lineTo = (ctx, coordinates) => ctx.lineTo(...coordinates);
 
@@ -48,25 +55,38 @@ export const saveContext = (ctx) => ctx.save();
 
 export const restoreContext = (ctx) => ctx.restore();
 
-export const fillText = (ctx, text, coordinates) => ctx.fillText(text, ...coordinates);
+export const fillText = (ctx, text, coordinates) =>
+  ctx.fillText(text, ...coordinates);
 
-export const strokeText = (ctx, text, coordinates) => ctx.strokeText(text, ...coordinates);
+export const strokeText = (ctx, text, coordinates) =>
+  ctx.strokeText(text, ...coordinates);
 
-export const drawImage = (ctx, image, sx, sy, sWidth, sHeight, dx, dy, dWidth, dHeight) => ctx.drawImage(image, sx, sy, sWidth, sHeight, dx, dy, dWidth, dHeight);
+export const drawImage = (
+  ctx,
+  image,
+  sx,
+  sy,
+  sWidth,
+  sHeight,
+  dx,
+  dy,
+  dWidth,
+  dHeight
+) => ctx.drawImage(image, sx, sy, sWidth, sHeight, dx, dy, dWidth, dHeight);
 
-export const setFillStyle = (ctx, style) => ctx.fillStyle = style;
+export const setFillStyle = (ctx, style) => (ctx.fillStyle = style);
 
-export const setStrokeStyle = (ctx, style) => ctx.strokeStyle = style;
+export const setStrokeStyle = (ctx, style) => (ctx.strokeStyle = style);
 
-export const setfont = (ctx, font) => ctx.font = font;
+export const setfont = (ctx, font) => (ctx.font = font);
 
-export const setTextAlign = (ctx, value) => ctx.textAlign = value;
+export const setTextAlign = (ctx, value) => (ctx.textAlign = value);
 
-export const setTextBaseLing = (ctx, value) => ctx.textBaseLine = value;
+export const setTextBaseLing = (ctx, value) => (ctx.textBaseLine = value);
 
-export const setLineWidth = (ctx, width) => ctx.lineWidth = width;
+export const setLineWidth = (ctx, width) => (ctx.lineWidth = width);
 
-export const setGlobalAlpha = (ctx, value) => ctx.setGlobalAlpha = value;
+export const setGlobalAlpha = (ctx, value) => (ctx.setGlobalAlpha = value);
 
 export const fill = (ctx) => ctx.fill();
 

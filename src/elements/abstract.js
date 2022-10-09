@@ -12,10 +12,10 @@ export default class Element extends TreeNode {
 
   translate(x = 0, y = 0) {
     this._translate(x, y);
-    if (this.children) this.children.forEach((element) => element.translate(x, y));
+    if (this.children)
+      this.children.forEach((element) => element.translate(x, y));
     if (this.shadow) this.shadow.forEach((element) => element.translate(x, y));
   }
-
 
   render(ctx) {
     if (this.visible) this._render(ctx);
@@ -25,7 +25,8 @@ export default class Element extends TreeNode {
 
   scale(factor) {
     this._scale(factor);
-    if (this.children) this.children.forEach((element) => element.scale(factor));
+    if (this.children)
+      this.children.forEach((element) => element.scale(factor));
     if (this.shadow) this.shadow.forEach((element) => element.scale(factor));
   }
 

@@ -9,8 +9,8 @@ export class TreeNode {
     this.prev = null;
     this.next = null;
 
-    if (children) children.forEach((node) => node.parent = this);
-    if (shadow) shadow.forEach((node) => node.parent = this);
+    if (children) children.forEach((node) => (node.parent = this));
+    if (shadow) shadow.forEach((node) => (node.parent = this));
   }
 
   addChild(node) {

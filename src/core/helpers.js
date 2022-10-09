@@ -6,11 +6,12 @@ export const normalizeFont = (userFont) => {
   return font;
 };
 
-export const getColorScale = () => { };
+export const getColorScale = () => {};
 
-export const pickColorFromColorScale = () => { };
+export const pickColorFromColorScale = () => {};
 
-export const getRandomHexColor = () => `#${Math.trunc(Math.random() * 16777215).toString(16)}`;
+export const getRandomHexColor = () =>
+  `#${Math.trunc(Math.random() * 16777215).toString(16)}`;
 
 export const getRandomRgbColor = (min = 90, max = 200) => {
   const color = [];
@@ -21,7 +22,7 @@ export const getRandomRgbColor = (min = 90, max = 200) => {
   }
 
   return `rgb(${color})`;
-}
+};
 
 export const setCanvas = (canvas, ctx, settings) => {
   const bounds = canvas.getBoundingClientRect();
@@ -38,7 +39,7 @@ export const getColorScheme = (userColorScheme) => {
 };
 
 export const getBaseRadius = (radius, limits) => {
-  if (limits.min >= 0) return radius.inner
+  if (limits.min >= 0) return radius.inner;
   else if (limits.max <= 0) return radius.outer;
-  else return -limits.min / limits.distance * radius.outer;
-}
+  else return (-limits.min / limits.distance) * radius.outer;
+};

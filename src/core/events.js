@@ -1,7 +1,10 @@
-import { moveVectorOrigin, getVectorAngle } from "../utils/utils.js";
-import Arc from "../elements/arc.js";
+import { roundRect } from './canvas.js';
 
-export const getEventListener = (target) => {
+export const showDetails = (ctx, entries, coordinates, up = true) => {
+  
+};
+
+export const getHandler = (target) => {
   let flag = false;
   let lastActive = target.om;
 
@@ -15,7 +18,6 @@ export const getEventListener = (target) => {
 
     requestAnimationFrame(() => {
       if (node !== lastActive) {
-        console.log(node.meta.role)
         if (lastActive.onMouseLeave) lastActive.onMouseLeave(target.ctx);
         if (node.onMouseEnter) node.onMouseEnter(target.ctx);
         lastActive = node;
@@ -25,5 +27,5 @@ export const getEventListener = (target) => {
     });
 
     flag = true;
-  }
+  };
 };

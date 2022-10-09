@@ -1,5 +1,12 @@
-import { beginPath, fillRect, setFillStyle, setStrokeStyle, strokeRect } from '../core/canvas.js';
-import Element from './element.js';
+import {
+  beginPath,
+  fillRect,
+  setFillStyle,
+  setStrokeStyle,
+  strokeRect,
+} from '../core/canvas.js';
+import Element from './abstract.js';
+
 // origin
 //        +-------+
 //        |\      |
@@ -9,9 +16,8 @@ import Element from './element.js';
 //        |    \  |
 //        |     \ |
 //        |      \|
-//        +-------+ 
+//        +-------+
 //                   diagonal
-
 
 export default class Rectangle extends Element {
   constructor(parameters, meta = {}, style = {}) {
@@ -22,7 +28,7 @@ export default class Rectangle extends Element {
     this.diagonal = [0, 0];
 
     this._calculateDiagonal();
-  };
+  }
 
   _scale(factor) {
     this.width *= factor;
@@ -53,10 +59,7 @@ export default class Rectangle extends Element {
   }
 
   _calculateDiagonal() {
-    this.diagonal = [
-      this.origin[0] + this.width,
-      this.origin[1] + this.height
-    ];
+    this.diagonal = [this.origin[0] + this.width, this.origin[1] + this.height];
   }
 
   intersects(point) {

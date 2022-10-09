@@ -1,8 +1,10 @@
 {
   "scripts": {
+    "lint": "eslint .",
     "server": "browser-sync start -s -w ./src"
   },
   "devDependencies": {
-    "browser-sync": "^2.27.10"
+    "browser-sync": "^2.27.10",
+    "eslint": "^8.25.0"
   }
 }

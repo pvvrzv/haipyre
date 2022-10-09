@@ -1,5 +1,5 @@
-import Rectangle from "./rectangle.js";
-import { fillText, setFillStyle } from "../core/canvas.js";
+import Rectangle from './rectangle.js';
+import { fillText, setFillStyle } from '../core/canvas.js';
 
 export default class Text extends Rectangle {
   constructor(parameters, meta = {}, style = {}) {

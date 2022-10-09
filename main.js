@@ -27,8 +27,8 @@ const radarLabels = ['running', 'cycling', 'sleeping', 'walking', 'juggle'];
 const options = {
   dataset: {
     radarLabels: radarLabels,
-    data: radarData
+    data: data
   }
 };
 
-const chart = new Radar(canvas, options)
+const chart = new Pie(canvas, options)

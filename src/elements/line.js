@@ -1,5 +1,11 @@
-import Element from './element.js';
-import { beginPath, moveTo, lineTo, setFillStyle, fill } from '../core/canvas.js';
+import Element from './abstract.js';
+import {
+  beginPath,
+  moveTo,
+  lineTo,
+  setFillStyle,
+  fill,
+} from '../core/canvas.js';
 
 class Line extends Element {
   constructor(parameters, meta = {}, style = {}) {

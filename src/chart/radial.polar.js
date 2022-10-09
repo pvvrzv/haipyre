@@ -1,9 +1,9 @@
-import Radial from './radial.js'
+import Radial from './radial.js';
 import { DOUBLE_PI, HALF_PI, THREE_HALFS_PI } from '../core/defaults.js';
 import { getDataLimits } from '../core/data.js';
 import { getBaseRadius } from '../core/helpers.js';
 import Arc from '../elements/arc.js';
-import { getEventListener } from '../core/events.js';
+import { getHandler } from '../core/events.js';
 
 const getPolarChart = (ctx, legend, settings) => {
   const width = settings.width;
@@ -24,10 +24,10 @@ const getPolarChart = (ctx, legend, settings) => {
       },
       startAngle: -HALF_PI,
       endAngle: THREE_HALFS_PI,
-      visible: false
+      visible: false,
     },
     {
-      role: 'chart'
+      role: 'chart',
     }
   );
 
@@ -45,18 +45,18 @@ const getPolarChart = (ctx, legend, settings) => {
         origin: chart.origin,
         radius: {
           inner: 0,
-          outer: r
+          outer: r,
         },
         startAngle: sa,
         endAngle: ea,
       },
       {
         role: 'PolarChartSegmeng',
-        value: data[i].val
+        value: data[i].val,
       },
       {
         background: data[i].background || settings.colorScheme.data.background,
-        border: '#fff'
+        border: '#fff',
       }
     );
 
@@ -78,9 +78,8 @@ export default class Polar extends Radial {
     this.chart = getPolarChart(this.ctx, this.legend, this.settings);
     this.om.addChild(this.chart);
     this.chart.render(this.ctx);
-    
-    this.canvas.addEventListener('mousemove', getEventListener(this));
 
+    this.canvas.addEventListener('mousemove', getHandler(this));
   }
 }
 

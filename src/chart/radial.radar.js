@@ -4,7 +4,7 @@ import { getRadarDataLimits } from '../core/data.js';
 import { getBaseRadius } from '../core/helpers.js';
 import { polarToCartesian } from '../utils/utils.js';
 import Arc from '../elements/arc.js';
-import { getEventListener } from '../core/events.js';
+import { getHandler } from '../core/events.js';
 
 const getRadarChart = (ctx, legend, settings) => {
   const MARKER_RADIUS = 5;
@@ -22,24 +22,24 @@ const getRadarChart = (ctx, legend, settings) => {
       radius: {
         inner: 0,
         outer: r,
-        base: getBaseRadius({ inner: 0, outer: r }, settings.limits)
+        base: getBaseRadius({ inner: 0, outer: r }, settings.limits),
       },
-      startAngle: - HALF_PI,
+      startAngle: -HALF_PI,
       endAngle: THREE_HALFS_PI,
     },
     {
-      role: 'chart'
+      role: 'chart',
     }
   );
 
   const coordinateSystem = new Element(
     {
-      step: step
+      step: step,
     },
     {
-      role: 'coordinateSystem'
+      role: 'coordinateSystem',
     }
-  )
+  );
 
   chart.addShadow(coordinateSystem);
 
@@ -60,21 +60,22 @@ const getRadarChart = (ctx, legend, settings) => {
           origin: coordinates[0],
           radius: {
             inner: 0,
-            outer: MARKER_RADIUS
+            outer: MARKER_RADIUS,
           },
           startAngle: 0,
-          endAngle: DOUBLE_PI
+          endAngle: DOUBLE_PI,
         },
         {
           role: 'radarChartMarker',
-          value: dataUnit.val[j]
+          value: dataUnit.val[j],
         },
         {
-          background: dataUnit.background || settings.colorScheme.data.background
+          background:
+            dataUnit.background || settings.colorScheme.data.background,
         }
       );
 
-      chart.addChild(marker)
+      chart.addChild(marker);
 
       angle += step;
       j++;
@@ -88,7 +89,6 @@ const getRadarChart = (ctx, legend, settings) => {
 };
 
 export default class Radar extends Radial {
-
   constructor(canvas, options) {
     super(canvas, options);
 
@@ -98,9 +98,8 @@ export default class Radar extends Radial {
     this.om.addChild(this.chart);
     this.chart.render(this.ctx);
 
-    this.canvas.addEventListener('mousemove', getEventListener(this));
+    this.canvas.addEventListener('mousemove', getHandler(this));
   }
-
 }
 
 Radar.prototype._getDataLimits = getRadarDataLimits;

@@ -11,7 +11,7 @@ export const FONT = {
   variant: 'normal',
   weight: 'normal',
   size: 12,
-  family: ['Helvetica', 'Arial', 'sans-serif']
+  family: ['Helvetica', 'Arial', 'sans-serif'],
 };
 
 export const COLOR_SCHEME = {

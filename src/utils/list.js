@@ -9,8 +9,7 @@ export class List {
     if (!this.head) {
       this.head = node;
       this.tail = node;
-    }
-    else {
+    } else {
       node.prev = this.tail;
       this.tail.next = node;
       this.tail = node;
@@ -20,15 +19,14 @@ export class List {
   }
 
   pop() {
-    if (this.size === 0) return;
+    if (this.size === 0) return undefined;
 
     const node = this.tail;
 
     if (this.size === 1) {
       this.head = null;
       this.tail = null;
-    }
-    else {
+    } else {
       this.tail.prev.next = null;
       this.tail = this.tail.prev;
     }
@@ -42,8 +40,7 @@ export class List {
     if (!this.head) {
       this.head = node;
       this.tail = node;
-    }
-    else {
+    } else {
       node.next = this.head;
       this.head.prev = node;
       this.head = node;
@@ -52,15 +49,14 @@ export class List {
   }
 
   unshift() {
-    if (this.size === 0) return;
+    if (this.size === 0) return undefined;
 
     const node = this.head;
 
     if (this.size === 1) {
       this.head = null;
       this.tail = nill;
-    }
-    else {
+    } else {
       this.head.next.prev = null;
       this.head = this.head.next;
     }
@@ -95,7 +91,7 @@ export class List {
 
       node = node.next;
       i++;
-    };
+    }
 
     return;
   }

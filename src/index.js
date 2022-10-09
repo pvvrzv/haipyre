@@ -3,10 +3,4 @@ import Lines from './chart/radial.lines.js';
 import Polar from './chart/radial.polar.js';
 import Radar from './chart/radial.radar.js';
 
-
-export {
-  Pie,
-  Lines,
-  Polar,
-  Radar
-};
+export { Pie, Lines, Polar, Radar };
