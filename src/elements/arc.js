@@ -1,14 +1,6 @@
 import Element from './abstract.js';
 import { getVectorAngle, moveVectorOrigin } from '../utils/utils.js';
-import {
-  beginPath,
-  fill,
-  renderCircleSegment,
-  renderDiscSegment,
-  setFillStyle,
-  setStrokeStyle,
-  stroke,
-} from '../core/canvas.js';
+import { beginPath, fill, renderCircleSegment, renderDiscSegment, setFillStyle, setStrokeStyle, stroke } from '../core/canvas.js';
 
 export default class Arc extends Element {
   constructor(parameters, meta = {}, style = {}) {
@@ -56,23 +48,8 @@ export default class Arc extends Element {
     setFillStyle(ctx, this.style.background);
     setStrokeStyle(ctx, this.style.border);
 
-    if (this.radius.inner > 0)
-      renderCircleSegment(
-        ctx,
-        this.origin,
-        this.radius.outer,
-        this.radius.inner,
-        this.startAngle,
-        this.endAngle
-      );
-    else
-      renderDiscSegment(
-        ctx,
-        this.origin,
-        this.radius.outer,
-        this.startAngle,
-        this.endAngle
-      );
+    if (this.radius.inner > 0) renderCircleSegment(ctx, this.origin, this.radius.outer, this.radius.inner, this.startAngle, this.endAngle);
+    else renderDiscSegment(ctx, this.origin, this.radius.outer, this.startAngle, this.endAngle);
 
     fill(ctx);
     stroke(ctx);

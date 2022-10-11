@@ -1,10 +1,4 @@
-import {
-  beginPath,
-  fillRect,
-  setFillStyle,
-  setStrokeStyle,
-  strokeRect,
-} from '../core/canvas.js';
+import { beginPath, clearRect, fillRect, setFillStyle, setStrokeStyle, strokeRect } from '../core/canvas.js';
 import Element from './abstract.js';
 
 // origin
@@ -56,6 +50,10 @@ export default class Rectangle extends Element {
     this.height = height;
 
     this._calculateDiagonal();
+  }
+
+  clear(ctx) {
+    clearRect(ctx, this.origin, this.width, this.height);
   }
 
   _calculateDiagonal() {

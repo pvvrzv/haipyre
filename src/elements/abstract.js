@@ -12,8 +12,7 @@ export default class Element extends TreeNode {
 
   translate(x = 0, y = 0) {
     this._translate(x, y);
-    if (this.children)
-      this.children.forEach((element) => element.translate(x, y));
+    if (this.children) this.children.forEach((element) => element.translate(x, y));
     if (this.shadow) this.shadow.forEach((element) => element.translate(x, y));
   }
 
@@ -23,10 +22,13 @@ export default class Element extends TreeNode {
     if (this.shadow) this.shadow.forEach((element) => element.render(ctx));
   }
 
+  clear() {
+    throw new Error('Method clear was not implemented on this element');
+  }
+
   scale(factor) {
     this._scale(factor);
-    if (this.children)
-      this.children.forEach((element) => element.scale(factor));
+    if (this.children) this.children.forEach((element) => element.scale(factor));
     if (this.shadow) this.shadow.forEach((element) => element.scale(factor));
   }
 
