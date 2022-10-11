@@ -1,0 +1,20 @@
+name: Optimization
+description: Propose optimization
+labels: ['Type: Optimization']
+body:
+  - type: textarea
+    attributes:
+      label: Domain
+      description: What do you want to optimize.
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: Proposed optimization
+      description: A clear and concise description of the solution you'd like to suggest.
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: Additional context
+      description: Add any other context goes here.
