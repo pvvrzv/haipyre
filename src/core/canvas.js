@@ -34,14 +34,11 @@ export const renderRectangle = (ctx, coordinates, width, height) => {
 export const roundRect = (ctx, coordinates, width, height, radii) =>
   ctx.roundRect(...coordinates, width, height, radii);
 
-export const rect = (ctx, coordinates, width, height) =>
-  ctx.rect(...coordinates, width, height);
+export const rect = (ctx, coordinates, width, height) => ctx.rect(...coordinates, width, height);
 
-export const fillRect = (ctx, coordinates, width, height) =>
-  ctx.fillRect(...coordinates, width, height);
+export const fillRect = (ctx, coordinates, width, height) => ctx.fillRect(...coordinates, width, height);
 
-export const strokeRect = (ctx, coordinates, width, height) =>
-  ctx.strokeRect(...coordinates, width, height);
+export const strokeRect = (ctx, coordinates, width, height) => ctx.strokeRect(...coordinates, width, height);
 
 export const lineTo = (ctx, coordinates) => ctx.lineTo(...coordinates);
 
@@ -55,24 +52,12 @@ export const saveContext = (ctx) => ctx.save();
 
 export const restoreContext = (ctx) => ctx.restore();
 
-export const fillText = (ctx, text, coordinates) =>
-  ctx.fillText(text, ...coordinates);
+export const fillText = (ctx, text, coordinates) => ctx.fillText(text, ...coordinates);
 
-export const strokeText = (ctx, text, coordinates) =>
-  ctx.strokeText(text, ...coordinates);
+export const strokeText = (ctx, text, coordinates) => ctx.strokeText(text, ...coordinates);
 
-export const drawImage = (
-  ctx,
-  image,
-  sx,
-  sy,
-  sWidth,
-  sHeight,
-  dx,
-  dy,
-  dWidth,
-  dHeight
-) => ctx.drawImage(image, sx, sy, sWidth, sHeight, dx, dy, dWidth, dHeight);
+export const drawImage = (ctx, image, sx, sy, sWidth, sHeight, dx, dy, dWidth, dHeight) =>
+  ctx.drawImage(image, sx, sy, sWidth, sHeight, dx, dy, dWidth, dHeight);
 
 export const setFillStyle = (ctx, style) => (ctx.fillStyle = style);
 
@@ -82,7 +67,7 @@ export const setfont = (ctx, font) => (ctx.font = font);
 
 export const setTextAlign = (ctx, value) => (ctx.textAlign = value);
 
-export const setTextBaseLing = (ctx, value) => (ctx.textBaseLine = value);
+export const setTextBaseLine = (ctx, value) => (ctx.textBaseline = value);
 
 export const setLineWidth = (ctx, width) => (ctx.lineWidth = width);
 
@@ -95,3 +80,5 @@ export const stroke = (ctx) => ctx.stroke();
 export const fillPath = (ctx, path) => ctx.fill(path);
 
 export const strokePath = (ctx, path) => ctx.stroke(path);
+
+export const clearRect = (ctx, coordinates, width, height) => ctx.clearRect(...coordinates, width, height);
