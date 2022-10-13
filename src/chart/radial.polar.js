@@ -1,11 +1,13 @@
 import Radial from './radial.js';
-import { DOUBLE_PI, HALF_PI, THREE_HALFS_PI } from '../core/defaults.js';
+import { DOUBLE_PI, HALF_PI, THREE_QUARTER_PI } from '../core/defaults.js';
 import { getDataLimits } from '../core/data.js';
 import { getBaseRadius } from '../core/helpers.js';
 import Arc from '../elements/arc.js';
 import { getHandler } from '../core/events.js';
+import { displayEntryDetails } from '../core/events.js';
+import { polarToCartesian } from '../utils/utils.js';
 
-const getPolarChart = (ctx, legend, settings) => {
+const getPolarChart = (ctx, legend, settings, root) => {
   const width = settings.width;
   const height = settings.height - legend.diagonal[1];
   const d = Math.min(width, height) * 0.9;
@@ -23,7 +25,7 @@ const getPolarChart = (ctx, legend, settings) => {
         base: getBaseRadius({ innter: 0, outer: r }, settings.limits),
       },
       startAngle: -HALF_PI,
-      endAngle: THREE_HALFS_PI,
+      endAngle: THREE_QUARTER_PI,
       visible: false,
     },
     {
@@ -53,12 +55,25 @@ const getPolarChart = (ctx, legend, settings) => {
       {
         role: 'PolarChartSegmeng',
         value: data[i].val,
+        label: data[i].label,
       },
       {
-        background: data[i].background || settings.colorScheme.data.background,
+        background: data[i].background || settings.style.data.background,
         border: '#fff',
       }
     );
+
+    segment.onMouseEnter = () => {
+      const median = (segment.startAngle + segment.endAngle) / 2;
+      const middle = (segment.radius.inner + segment.radius.outer) / 2;
+      const center = polarToCartesian(median, segment.origin, [middle])[0];
+      displayEntryDetails(ctx, center, segment, settings.font);
+    };
+
+    segment.onMouseLeave = () => {
+      root.clear(ctx);
+      root.render(ctx);
+    };
 
     chart.addChild(segment);
 
@@ -75,11 +90,11 @@ export default class Polar extends Radial {
 
     this.settings.TYPE = '0';
 
-    this.chart = getPolarChart(this.ctx, this.legend, this.settings);
-    this.om.addChild(this.chart);
-    this.chart.render(this.ctx);
+    this.chart = getPolarChart(this.ctx, this.legend, this.settings, this.root);
+    this.root.addChild(this.chart);
+    this.root.render(this.ctx);
 
-    this.canvas.addEventListener('mousemove', getHandler(this));
+    this.canvas.addEventListener('mousemove', getHandler(this.root));
   }
 }
 

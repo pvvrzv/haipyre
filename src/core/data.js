@@ -1,4 +1,4 @@
-import { Text } from '../elements/text.js';
+import Text from '../elements/text.js';
 
 export const getDataLimits = (dataset) => {
   const limits = {

@@ -85,12 +85,8 @@ export const getLegend = (ctx, settings) => {
         },
         { role: 'legendMarker' },
         {
-          background:
-            dataUnit.background || settings.colorScheme.data.backgroundAlpha,
-          border:
-            dataUnit.border ||
-            dataUnit.background ||
-            settings.colorScheme.data.background,
+          background: dataUnit.background || settings.style.data.backgroundAlpha,
+          border: dataUnit.border || dataUnit.background || settings.style.data.background,
         }
       );
 
@@ -100,6 +96,7 @@ export const getLegend = (ctx, settings) => {
           width: textMeasurements.width,
           height: standard.unit.height,
           content: dataUnit.label,
+          baseline: 'top',
         },
         {
           role: 'legendLabel',
@@ -134,10 +131,7 @@ export const getLegend = (ctx, settings) => {
       row.addChild(unit);
     }
 
-    row.update(
-      x - standard.unit.margin.right - standard.margin.left,
-      row.height
-    );
+    row.update(x - standard.unit.margin.right - standard.margin.left, row.height);
     row.translate((legend.width - row.width) / 2, 0);
     legend.addChild(row);
     x = standard.margin.left;

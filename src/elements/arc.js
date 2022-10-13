@@ -1,6 +1,18 @@
 import Element from './abstract.js';
-import { getVectorAngle, moveVectorOrigin } from '../utils/utils.js';
-import { beginPath, fill, renderCircleSegment, renderDiscSegment, setFillStyle, setStrokeStyle, stroke } from '../core/canvas.js';
+import { getVectorAngle, subtractVectors } from '../utils/utils.js';
+import { DOUBLE_PI, HALF_PI } from '../core/defaults.js';
+import { clampNumber } from '../core/helpers.js';
+import {
+  beginPath,
+  fill,
+  renderCircleSegment,
+  renderDiscSegment,
+  setFillStyle,
+  setStrokeStyle,
+  stroke,
+} from '../core/canvas.js';
+
+const ANGLE_SHIFT = -HALF_PI;
 
 export default class Arc extends Element {
   constructor(parameters, meta = {}, style = {}) {
@@ -8,6 +20,7 @@ export default class Arc extends Element {
 
     this.startAngle = parameters.startAngle;
     this.endAngle = parameters.endAngle;
+
     this.radius = parameters.radius;
   }
 
@@ -28,7 +41,7 @@ export default class Arc extends Element {
   }
 
   intersects(point) {
-    const relativePoint = moveVectorOrigin(point, this.origin);
+    const relativePoint = subtractVectors(point, this.origin);
     const radius = Math.hypot(...relativePoint);
     const angle = getVectorAngle(relativePoint);
 
@@ -36,7 +49,10 @@ export default class Arc extends Element {
   }
 
   intersectsAngle(angle) {
-    return angle >= this.startAngle && angle <= this.endAngle;
+    const alpha = clampNumber(this.endAngle - angle, DOUBLE_PI);
+    const betha = clampNumber(this.endAngle - this.startAngle, DOUBLE_PI);
+
+    return alpha <= betha;
   }
 
   intersectsRadius(radius) {
@@ -48,7 +64,8 @@ export default class Arc extends Element {
     setFillStyle(ctx, this.style.background);
     setStrokeStyle(ctx, this.style.border);
 
-    if (this.radius.inner > 0) renderCircleSegment(ctx, this.origin, this.radius.outer, this.radius.inner, this.startAngle, this.endAngle);
+    if (this.radius.inner > 0)
+      renderCircleSegment(ctx, this.origin, this.radius.outer, this.radius.inner, this.startAngle, this.endAngle);
     else renderDiscSegment(ctx, this.origin, this.radius.outer, this.startAngle, this.endAngle);
 
     fill(ctx);

@@ -18,24 +18,15 @@ export const getArrayLimits = (arr) => ({
 
 export const abs = (n) => Math.abs(n);
 
-export const isPointInLineSegment = (px, line) =>
-  px >= line[0] && px <= line[1] ? true : false;
+export const isPointInLineSegment = (px, line) => (px >= line[0] && px <= line[1] ? true : false);
 
 export const getVectorAngle = (vector) => {
-  //clockwise [-HALF_PI, THREE_HALFS_PI];
-  const angle = Math.atan2(vector[1], vector[0]);
-
-  if (angle < -HALF_PI) {
-    return angle + DOUBLE_PI;
-  }
-
-  return angle;
+  return Math.atan2(vector[1], vector[0]);
 };
 
-export const moveVectorOrigin = (vector, origin) => {
-  //considers current origin to be [0,0]
-  const x = vector[0] - origin[0];
-  const y = vector[1] - origin[1];
+export const subtractVectors = (v1, v2) => {
+  const x = v1[0] - v2[0];
+  const y = v1[1] - v2[1];
 
   return [x, y];
 };

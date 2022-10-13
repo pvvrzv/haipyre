@@ -1,12 +1,12 @@
 import Radial from './radial.js';
-import { DOUBLE_PI, HALF_PI, THREE_HALFS_PI } from '../core/defaults.js';
+import { DOUBLE_PI, HALF_PI, THREE_QUARTER_PI } from '../core/defaults.js';
 import { getRadarDataLimits } from '../core/data.js';
 import { getBaseRadius } from '../core/helpers.js';
 import { polarToCartesian } from '../utils/utils.js';
 import Arc from '../elements/arc.js';
-import { getHandler } from '../core/events.js';
+import { displayEntryDetails, getHandler } from '../core/events.js';
 
-const getRadarChart = (ctx, legend, settings) => {
+const getRadarChart = (ctx, legend, settings, root) => {
   const MARKER_RADIUS = 5;
   const MARKER_DIAMETER = MARKER_RADIUS * 2;
   const width = settings.width;
@@ -25,23 +25,13 @@ const getRadarChart = (ctx, legend, settings) => {
         base: getBaseRadius({ inner: 0, outer: r }, settings.limits),
       },
       startAngle: -HALF_PI,
-      endAngle: THREE_HALFS_PI,
+      endAngle: THREE_QUARTER_PI,
+      visible: false,
     },
     {
       role: 'chart',
     }
   );
-
-  const coordinateSystem = new Element(
-    {
-      step: step,
-    },
-    {
-      role: 'coordinateSystem',
-    }
-  );
-
-  chart.addShadow(coordinateSystem);
 
   let i = 0;
   let j = 0;
@@ -68,12 +58,22 @@ const getRadarChart = (ctx, legend, settings) => {
         {
           role: 'radarChartMarker',
           value: dataUnit.val[j],
+          label: dataUnit.label,
         },
         {
-          background:
-            dataUnit.background || settings.colorScheme.data.background,
+          background: dataUnit.background || settings.style.data.background,
+          border: 'transparent',
         }
       );
+
+      marker.onMouseEnter = () => {
+        displayEntryDetails(ctx, marker.origin, marker, settings.font);
+      };
+
+      marker.onMouseLeave = () => {
+        root.clear(ctx);
+        root.render(ctx);
+      };
 
       chart.addChild(marker);
 
@@ -94,11 +94,11 @@ export default class Radar extends Radial {
 
     this.TYPE = 3;
 
-    this.chart = getRadarChart(this.ctx, this.legend, this.settings);
-    this.om.addChild(this.chart);
+    this.chart = getRadarChart(this.ctx, this.legend, this.settings, this.root);
+    this.root.addChild(this.chart);
     this.chart.render(this.ctx);
 
-    this.canvas.addEventListener('mousemove', getHandler(this));
+    this.canvas.addEventListener('mousemove', getHandler(this.root));
   }
 }
 

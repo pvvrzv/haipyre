@@ -1,10 +1,11 @@
 import Radial from './radial.js';
-import { DOUBLE_PI, HALF_PI, THREE_HALFS_PI } from '../core/defaults.js';
+import { DOUBLE_PI, HALF_PI } from '../core/defaults.js';
 import { getDataLimits } from '../core/data.js';
-import { abs } from '../utils/utils.js';
+import { abs, polarToCartesian } from '../utils/utils.js';
 import Arc from '../elements/arc.js';
+import { displayEntryDetails, getHandler } from '../core/events.js';
 
-const getLineChart = (ctx, legend, settings) => {
+const getLineChart = (ctx, legend, settings, root) => {
   const width = settings.width;
   const height = settings.height - legend.diagonal[1];
   const d = Math.min(width, height) * 0.9;
@@ -21,8 +22,8 @@ const getLineChart = (ctx, legend, settings) => {
         inner: 0,
         outer: r,
       },
-      startAngle: -HALF_PI,
-      endAngle: THREE_HALFS_PI,
+      startAngle: 0,
+      endAngle: DOUBLE_PI,
       visible: false,
     },
     {
@@ -31,9 +32,9 @@ const getLineChart = (ctx, legend, settings) => {
     {}
   );
 
+  const sa = -HALF_PI;
   let outer = chart.radius.outer;
   let inner = outer - lineWidth;
-  let sa = -HALF_PI;
   let ea = 0;
   let i = 0;
 
@@ -48,17 +49,31 @@ const getLineChart = (ctx, legend, settings) => {
           inner: inner,
           outer: outer,
         },
-        startAngle: sa > ea ? ea : sa,
-        endAngle: sa > ea ? sa : ea,
+        startAngle: Math.min(sa, ea),
+        endAngle: Math.max(sa, ea),
       },
       {
-        role: 'LinesChartSegment',
+        role: 'dataEntry',
+        value: data[i].val,
+        label: data[i].label,
       },
       {
-        background: data[i].background || settings.colorScheme.data.background,
+        background: data[i].background || settings.style.data.background,
         border: 'transparent',
       }
     );
+
+    segment.onMouseEnter = () => {
+      const median = (segment.startAngle + segment.endAngle) / 2;
+      const middle = (segment.radius.inner + segment.radius.outer) / 2;
+      const center = polarToCartesian(median, segment.origin, [middle])[0];
+      displayEntryDetails(ctx, center, segment, settings.font);
+    };
+
+    segment.onMouseLeave = () => {
+      root.clear(ctx);
+      root.render(ctx);
+    };
 
     i++;
     outer -= lineWidth + linePadding;
@@ -75,8 +90,11 @@ export default class Lines extends Radial {
 
     this.TYPE = 2;
 
-    this.chart = getLineChart(this.ctx, this.legend, this.settings);
-    this.chart.render(this.ctx);
+    this.chart = getLineChart(this.ctx, this.legend, this.settings, this.root);
+    this.root.addChild(this.chart);
+    this.root.render(this.ctx);
+
+    this.canvas.addEventListener('mousemove', getHandler(this.root));
   }
 }
 

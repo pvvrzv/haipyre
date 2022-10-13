@@ -5,7 +5,7 @@ const canvas = document.getElementById('canvas');
 const data = [
   { label: 'Jan.', val: -5, background: 'rgb(255, 99, 132)' },
   { label: 'Feb.', val: 11, background: 'rgb(255, 99, 132)' },
-  { label: 'March', val: 15, },
+  { label: 'March', val: 15 },
   { label: 'Apr.', val: -5 },
   { label: 'May.', val: 8 },
   { label: 'June', val: 3 },
@@ -27,8 +27,8 @@ const radarLabels = ['running', 'cycling', 'sleeping', 'walking', 'juggle'];
 const options = {
   dataset: {
     radarLabels: radarLabels,
-    data: data
-  }
+    data: radarData,
+  },
 };
 
-const chart = new Pie(canvas, options)
+const chart = new Radar(canvas, options);

@@ -82,3 +82,15 @@ export const fillPath = (ctx, path) => ctx.fill(path);
 export const strokePath = (ctx, path) => ctx.stroke(path);
 
 export const clearRect = (ctx, coordinates, width, height) => ctx.clearRect(...coordinates, width, height);
+
+export const setCanvas = (canvas, ctx, settings) => {
+  const DOMRect = canvas.getBoundingClientRect();
+  const width = Math.round(DOMRect.width);
+  const height = Math.round(DOMRect.height);
+
+  canvas.width = width * settings.dpr;
+  canvas.height = height * settings.dpr;
+  ctx.scale(settings.dpr, settings.dpr);
+
+  return [width, height];
+};
