@@ -1,6 +1,5 @@
 import Element from './abstract.js';
-import { getVectorAngle, subtractVectors, clampNumber } from '../core/math.js';
-import { DOUBLE_PI, HALF_PI } from '../core/defaults.js';
+import { DOUBLE_PI, HALF_PI, getVectorAngle, subtractVectors, clampNumber } from '../core/math.js';
 import {
   beginPath,
   fill,

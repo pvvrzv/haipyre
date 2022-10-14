@@ -1,11 +1,10 @@
 import Radial from './radial.js';
-import { DOUBLE_PI, HALF_PI, THREE_QUARTER_PI } from '../core/defaults.js';
 import { getDataLimits } from '../core/data.js';
 import { getBaseRadius } from '../core/helpers.js';
 import Arc from '../elements/arc.js';
 import { getHandler } from '../core/events.js';
 import { displayEntryDetails } from '../core/events.js';
-import { polarToCartesian } from '../core/math.js';
+import { DOUBLE_PI, HALF_PI, THREE_QUARTER_PI, polarToCartesian } from '../core/math.js';
 
 const getPolarChart = (ctx, legend, settings, root) => {
   const width = settings.width;

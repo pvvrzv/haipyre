@@ -1,6 +1,5 @@
 import Radial from './radial.js';
-import { DOUBLE_PI, HALF_PI, THREE_QUARTER_PI } from '../core/defaults.js';
-import { abs, polarToCartesian } from '../core/math.js';
+import { DOUBLE_PI, HALF_PI, THREE_QUARTER_PI, abs, polarToCartesian } from '../core/math.js';
 import Arc from '../elements/arc.js';
 import { getHandler, displayEntryDetails } from '../core/events.js';
 
@@ -95,7 +94,7 @@ export default class Pie extends Radial {
 }
 
 Pie.prototype._getDataLimits = (dataset) => {
-  const sum = dataset.data.reduce((a, e) => a + abs(e.val), 0);
+  const sum = dataset.data.reduce((a, e) => a + abs(e.value), 0);
   return {
     sum,
   };
