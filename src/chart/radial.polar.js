@@ -38,7 +38,7 @@ const getPolarChart = (ctx, legend, settings, root) => {
   let i = 0;
 
   while (i < data.length) {
-    const ratio = data[i].val / settings.limits.distance;
+    const ratio = data[i].value / settings.limits.distance;
     const r = ratio * chart.radius.outer + chart.radius.base;
     ea = sa + step;
 
@@ -54,7 +54,7 @@ const getPolarChart = (ctx, legend, settings, root) => {
       },
       {
         role: 'PolarChartSegmeng',
-        value: data[i].val,
+        value: data[i].value,
         label: data[i].label,
       },
       {

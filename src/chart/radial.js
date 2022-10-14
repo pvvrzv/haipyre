@@ -28,8 +28,10 @@ export default class Radial {
         role: 'drawingArea',
       }
     );
+
     this.legend = getLegend(this.ctx, this.settings);
     this.root.addChild(this.legend);
+
   }
 
   _getDataLimits() {

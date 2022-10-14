@@ -39,7 +39,7 @@ const getLineChart = (ctx, legend, settings, root) => {
   let i = 0;
 
   while (i < data.length) {
-    const ratio = data[i].val / absMax;
+    const ratio = data[i].value / absMax;
     ea = sa + DOUBLE_PI * ratio;
 
     const segment = new Arc(
@@ -54,7 +54,7 @@ const getLineChart = (ctx, legend, settings, root) => {
       },
       {
         role: 'dataEntry',
-        value: data[i].val,
+        value: data[i].value,
         label: data[i].label,
       },
       {

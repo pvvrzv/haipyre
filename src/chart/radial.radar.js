@@ -41,7 +41,7 @@ const getRadarChart = (ctx, legend, settings, root) => {
 
     while (j < settings.dataset.radarLabels.length) {
       const dataUnit = data[i];
-      const ratio = dataUnit.val[j] / settings.limits.distance;
+      const ratio = dataUnit.value[j] / settings.limits.distance;
       const r = ratio * chart.radius.outer + chart.radius.base;
       const coordinates = polarToCartesian(angle, chart.origin, [r]);
 
@@ -57,7 +57,7 @@ const getRadarChart = (ctx, legend, settings, root) => {
         },
         {
           role: 'radarChartMarker',
-          value: dataUnit.val[j],
+          value: dataUnit.value[j],
           label: dataUnit.label,
         },
         {

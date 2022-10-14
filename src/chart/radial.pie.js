@@ -34,7 +34,7 @@ const getPieChart = (legend, settings, ctx, root) => {
   let i = 0;
 
   while (i < data.length) {
-    const ratio = abs(data[i].val) / settings.limits.sum;
+    const ratio = abs(data[i].value) / settings.limits.sum;
     ea = sa + DOUBLE_PI * ratio;
 
     const segment = new Arc(
@@ -49,7 +49,7 @@ const getPieChart = (legend, settings, ctx, root) => {
       },
       {
         role: 'dataEntry',
-        value: data[i].val,
+        value: data[i].value,
         label: data[i].label,
       },
       {

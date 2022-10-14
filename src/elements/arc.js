@@ -20,7 +20,7 @@ export default class Arc extends Element {
 
     this.startAngle = parameters.startAngle;
     this.endAngle = parameters.endAngle;
-    this.circumference = clampNumber(this.endAngle - this.startAngle, DOUBLE_PI);
+    this.length = clampNumber(this.endAngle - this.startAngle, DOUBLE_PI);
 
     this.radius = parameters.radius;
   }
@@ -52,7 +52,7 @@ export default class Arc extends Element {
   intersectsAngle(angle) {
     const alpha = clampNumber(this.endAngle - angle, DOUBLE_PI);
 
-    return alpha <= this.circumference;
+    return alpha <= this.length;
   }
 
   intersectsRadius(radius) {

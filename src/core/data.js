@@ -7,8 +7,8 @@ export const getDataLimits = (dataset) => {
   };
 
   dataset.data.forEach((entry) => {
-    if (entry.val < limits.min) limits.min = entry.val;
-    if (entry.val > limits.max) limits.max = entry.val;
+    if (entry.value < limits.min) limits.min = entry.value;
+    if (entry.value > limits.max) limits.max = entry.value;
   });
 
   limits.distance = limits.max - limits.min;
@@ -24,8 +24,8 @@ export const getRadarDataLimits = (dataset) => {
 
   dataset.data.forEach((entry) => {
     for (let j = 0; j < dataset.radarLabels.length; j++) {
-      if (entry.val[j] < limits.min) limits.min = entry.val[j];
-      if (entry.val[j] > limits.max) limits.max = entry.val[j];
+      if (entry.value[j] < limits.min) limits.min = entry.value[j];
+      if (entry.value[j] > limits.max) limits.max = entry.value[j];
     }
   });
 
