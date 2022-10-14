@@ -5,7 +5,7 @@ import { getBaseRadius } from '../core/helpers.js';
 import Arc from '../elements/arc.js';
 import { getHandler } from '../core/events.js';
 import { displayEntryDetails } from '../core/events.js';
-import { polarToCartesian } from '../utils/utils.js';
+import { polarToCartesian } from '../core/math.js';
 
 const getPolarChart = (ctx, legend, settings, root) => {
   const width = settings.width;

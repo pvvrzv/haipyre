@@ -1,10 +1,10 @@
 import Element from './abstract.js';
-import { getVectorAngle, subtractVectors } from '../utils/utils.js';
+import { getVectorAngle, subtractVectors, clampNumber } from '../core/math.js';
 import { DOUBLE_PI, HALF_PI } from '../core/defaults.js';
-import { clampNumber } from '../core/helpers.js';
 import {
   beginPath,
   fill,
+  renderCircle,
   renderCircleSegment,
   renderDiscSegment,
   setFillStyle,
@@ -20,6 +20,7 @@ export default class Arc extends Element {
 
     this.startAngle = parameters.startAngle;
     this.endAngle = parameters.endAngle;
+    this.circumference = clampNumber(this.endAngle - this.startAngle, DOUBLE_PI);
 
     this.radius = parameters.radius;
   }
@@ -50,9 +51,8 @@ export default class Arc extends Element {
 
   intersectsAngle(angle) {
     const alpha = clampNumber(this.endAngle - angle, DOUBLE_PI);
-    const betha = clampNumber(this.endAngle - this.startAngle, DOUBLE_PI);
 
-    return alpha <= betha;
+    return alpha <= this.circumference;
   }
 
   intersectsRadius(radius) {
@@ -64,9 +64,14 @@ export default class Arc extends Element {
     setFillStyle(ctx, this.style.background);
     setStrokeStyle(ctx, this.style.border);
 
-    if (this.radius.inner > 0)
-      renderCircleSegment(ctx, this.origin, this.radius.outer, this.radius.inner, this.startAngle, this.endAngle);
-    else renderDiscSegment(ctx, this.origin, this.radius.outer, this.startAngle, this.endAngle);
+    if (this.circumference >= DOUBLE_PI) {
+      renderCircle(ctx, this.origin, this.radius.outer);
+      renderCircle(ctx, this.origin, this.radius.inner);
+    } else {
+      if (this.radius.inner > 0)
+        renderCircleSegment(ctx, this.origin, this.radius.outer, this.radius.inner, this.startAngle, this.endAngle);
+      else renderDiscSegment(ctx, this.origin, this.radius.outer, this.startAngle, this.endAngle);
+    }
 
     fill(ctx);
     stroke(ctx);

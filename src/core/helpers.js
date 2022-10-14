@@ -5,9 +5,3 @@ export const getBaseRadius = (radius, limits) => {
   else if (limits.max <= 0) return radius.outer;
   else return (-limits.min / limits.distance) * radius.outer;
 };
-
-export const clampNumber = (x, y) => {
-  //same as maplesoftware's frem
-  if (x === y) return x;
-  return x - y * Math.floor(x / y);
-};

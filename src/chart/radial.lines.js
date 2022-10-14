@@ -1,7 +1,7 @@
 import Radial from './radial.js';
 import { DOUBLE_PI, HALF_PI } from '../core/defaults.js';
 import { getDataLimits } from '../core/data.js';
-import { abs, polarToCartesian } from '../utils/utils.js';
+import { abs, polarToCartesian } from '../core/math.js';
 import Arc from '../elements/arc.js';
 import { displayEntryDetails, getHandler } from '../core/events.js';
 

@@ -2,7 +2,7 @@ import Radial from './radial.js';
 import { DOUBLE_PI, HALF_PI, THREE_QUARTER_PI } from '../core/defaults.js';
 import { getRadarDataLimits } from '../core/data.js';
 import { getBaseRadius } from '../core/helpers.js';
-import { polarToCartesian } from '../utils/utils.js';
+import { polarToCartesian } from '../core/math.js';
 import Arc from '../elements/arc.js';
 import { displayEntryDetails, getHandler } from '../core/events.js';
 
@@ -62,7 +62,7 @@ const getRadarChart = (ctx, legend, settings, root) => {
         },
         {
           background: dataUnit.background || settings.style.data.background,
-          border: 'transparent',
+          border: dataUnit.border || settings.style.data.border,
         }
       );
 
@@ -96,7 +96,7 @@ export default class Radar extends Radial {
 
     this.chart = getRadarChart(this.ctx, this.legend, this.settings, this.root);
     this.root.addChild(this.chart);
-    this.chart.render(this.ctx);
+    this.root.render(this.ctx);
 
     this.canvas.addEventListener('mousemove', getHandler(this.root));
   }

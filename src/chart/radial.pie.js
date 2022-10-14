@@ -1,8 +1,7 @@
 import Radial from './radial.js';
 import { DOUBLE_PI, HALF_PI, THREE_QUARTER_PI } from '../core/defaults.js';
-import { abs, polarToCartesian } from '../utils/utils.js';
+import { abs, polarToCartesian } from '../core/math.js';
 import Arc from '../elements/arc.js';
-import { clearRect } from '../core/canvas.js';
 import { getHandler, displayEntryDetails } from '../core/events.js';
 
 const INNER_TO_OUTER_RADIUS_RATIO = 0.3;
