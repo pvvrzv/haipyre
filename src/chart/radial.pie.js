@@ -19,8 +19,10 @@ const getPieChart = (legend, settings, ctx, root) => {
         inner: r * INNER_TO_OUTER_RADIUS_RATIO,
         outer: r,
       },
-      startAngle: -HALF_PI,
-      endAngle: THREE_QUARTER_PI,
+      angle: {
+        start: -HALF_PI,
+        end: THREE_QUARTER_PI,
+      },
       visible: false,
     },
     {
@@ -43,8 +45,10 @@ const getPieChart = (legend, settings, ctx, root) => {
           inner: chart.radius.outer * INNER_TO_OUTER_RADIUS_RATIO,
           outer: chart.radius.outer,
         },
-        startAngle: sa,
-        endAngle: ea,
+        angle: {
+          start: sa,
+          end: ea,
+        },
       },
       {
         role: 'dataEntry',
@@ -58,7 +62,7 @@ const getPieChart = (legend, settings, ctx, root) => {
     );
 
     segment.onMouseEnter = () => {
-      const median = (segment.startAngle + segment.endAngle) / 2;
+      const median = (segment.angle.start + segment.angle.end) / 2;
       const middle = (segment.radius.inner + segment.radius.outer) / 2;
       const center = polarToCartesian(median, segment.origin, [middle])[0];
       displayEntryDetails(ctx, center, segment, settings.font);

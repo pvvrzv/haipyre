@@ -21,8 +21,10 @@ const getLineChart = (ctx, legend, settings, root) => {
         inner: 0,
         outer: r,
       },
-      startAngle: 0,
-      endAngle: DOUBLE_PI,
+      angle: {
+        start: 0,
+        end: DOUBLE_PI,
+      },
       visible: false,
     },
     {
@@ -48,8 +50,10 @@ const getLineChart = (ctx, legend, settings, root) => {
           inner: inner,
           outer: outer,
         },
-        startAngle: Math.min(sa, ea),
-        endAngle: Math.max(sa, ea),
+        angle: {
+          start: Math.min(sa, ea),
+          end: Math.max(sa, ea),
+        },
       },
       {
         role: 'dataEntry',
@@ -63,7 +67,7 @@ const getLineChart = (ctx, legend, settings, root) => {
     );
 
     segment.onMouseEnter = () => {
-      const median = (segment.startAngle + segment.endAngle) / 2;
+      const median = (segment.angle.start + segment.angle.end) / 2;
       const middle = (segment.radius.inner + segment.radius.outer) / 2;
       const center = polarToCartesian(median, segment.origin, [middle])[0];
       displayEntryDetails(ctx, center, segment, settings.font);

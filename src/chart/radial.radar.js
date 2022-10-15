@@ -23,8 +23,10 @@ const getRadarChart = (ctx, legend, settings, root) => {
         outer: r,
         base: getBaseRadius({ inner: 0, outer: r }, settings.limits),
       },
-      startAngle: -HALF_PI,
-      endAngle: THREE_QUARTER_PI,
+      angle: {
+        start: -HALF_PI,
+        end: THREE_QUARTER_PI,
+      },
       visible: false,
     },
     {
@@ -51,8 +53,10 @@ const getRadarChart = (ctx, legend, settings, root) => {
             inner: 0,
             outer: MARKER_RADIUS,
           },
-          startAngle: 0,
-          endAngle: DOUBLE_PI,
+          angle: {
+            start: 0,
+            end: DOUBLE_PI
+          }
         },
         {
           role: 'radarChartMarker',

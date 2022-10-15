@@ -23,8 +23,10 @@ const getPolarChart = (ctx, legend, settings, root) => {
         outer: r,
         base: getBaseRadius({ innter: 0, outer: r }, settings.limits),
       },
-      startAngle: -HALF_PI,
-      endAngle: THREE_QUARTER_PI,
+      angle: {
+        start: -HALF_PI,
+        end: THREE_QUARTER_PI,
+      },
       visible: false,
     },
     {
@@ -48,8 +50,10 @@ const getPolarChart = (ctx, legend, settings, root) => {
           inner: 0,
           outer: r,
         },
-        startAngle: sa,
-        endAngle: ea,
+        angle: {
+          start: sa,
+          end: ea,
+        },
       },
       {
         role: 'PolarChartSegmeng',
@@ -63,7 +67,7 @@ const getPolarChart = (ctx, legend, settings, root) => {
     );
 
     segment.onMouseEnter = () => {
-      const median = (segment.startAngle + segment.endAngle) / 2;
+      const median = (segment.angle.start + segment.angle.end) / 2;
       const middle = (segment.radius.inner + segment.radius.outer) / 2;
       const center = polarToCartesian(median, segment.origin, [middle])[0];
       displayEntryDetails(ctx, center, segment, settings.font);

@@ -27,8 +27,8 @@ const radarLabels = ['running', 'cycling', 'sleeping', 'walking', 'juggle'];
 const options = {
   dataset: {
     radarLabels: radarLabels,
-    data: data,
+    data: radarData,
   },
 };
 
-const chart = new Lines(canvas, options);
+const chart = new Radar(canvas, options);

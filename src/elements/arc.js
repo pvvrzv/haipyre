@@ -17,9 +17,11 @@ export default class Arc extends Element {
   constructor(parameters, meta = {}, style = {}) {
     super(parameters, meta, style);
 
-    this.startAngle = parameters.startAngle;
-    this.endAngle = parameters.endAngle;
-    this.length = clampNumber(this.endAngle - this.startAngle, DOUBLE_PI);
+    this.angle = {
+      start: parameters.angle.start,
+      end: parameters.angle.end,
+      diff: clampNumber(parameters.angle.end - parameters.angle.start, DOUBLE_PI),
+    };
 
     this.radius = parameters.radius;
   }
@@ -49,9 +51,8 @@ export default class Arc extends Element {
   }
 
   intersectsAngle(angle) {
-    const alpha = clampNumber(this.endAngle - angle, DOUBLE_PI);
-
-    return alpha <= this.length;
+    const alpha = clampNumber(this.angle.end - angle, DOUBLE_PI);
+    return alpha <= this.angle.diff;
   }
 
   intersectsRadius(radius) {
@@ -63,14 +64,9 @@ export default class Arc extends Element {
     setFillStyle(ctx, this.style.background);
     setStrokeStyle(ctx, this.style.border);
 
-    if (this.circumference >= DOUBLE_PI) {
-      renderCircle(ctx, this.origin, this.radius.outer);
-      renderCircle(ctx, this.origin, this.radius.inner);
-    } else {
-      if (this.radius.inner > 0)
-        renderCircleSegment(ctx, this.origin, this.radius.outer, this.radius.inner, this.startAngle, this.endAngle);
-      else renderDiscSegment(ctx, this.origin, this.radius.outer, this.startAngle, this.endAngle);
-    }
+    if (this.radius.inner > 0)
+      renderCircleSegment(ctx, this.origin, this.radius.outer, this.radius.inner, this.angle.start, this.angle.end);
+    else renderDiscSegment(ctx, this.origin, this.radius.outer, this.angle.start, this.angle.end);
 
     fill(ctx);
     stroke(ctx);
