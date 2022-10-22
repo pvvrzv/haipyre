@@ -1,9 +1,9 @@
 import Radial from './radial.js';
-import { getRadarDataLimits } from '../core/data.js';
-import { getBaseRadius } from '../core/helpers.js';
-import { DOUBLE_PI, HALF_PI, THREE_QUARTER_PI, polarToCartesian } from '../core/math.js';
-import Arc from '../elements/arc.js';
-import { displayEntryDetails, getHandler } from '../core/events.js';
+import { getRadarDataLimits } from '../../core/data.js';
+import { getBaseRadius } from '../../core/helpers.js';
+import { DOUBLE_PI, HALF_PI, THREE_QUARTER_PI, polarToCartesian } from '../../core/math.js';
+import Arc from '../../elements/arc.js';
+import { displayEntryDetails, getHandler } from '../../core/events.js';
 
 const getRadarChart = (ctx, legend, settings, root) => {
   const MARKER_RADIUS = 5;
@@ -55,8 +55,8 @@ const getRadarChart = (ctx, legend, settings, root) => {
           },
           angle: {
             start: 0,
-            end: DOUBLE_PI
-          }
+            end: DOUBLE_PI,
+          },
         },
         {
           role: 'radarChartMarker',
@@ -64,8 +64,8 @@ const getRadarChart = (ctx, legend, settings, root) => {
           label: dataUnit.label,
         },
         {
-          background: dataUnit.background || settings.style.data.background,
-          border: dataUnit.border || settings.style.data.border,
+          background: dataUnit.style.background || settings.style.data.background,
+          border: dataUnit.style.border || settings.style.data.border,
         }
       );
 
@@ -92,10 +92,10 @@ const getRadarChart = (ctx, legend, settings, root) => {
 };
 
 export default class Radar extends Radial {
+  TYPE = 'radar';
+
   constructor(canvas, options) {
     super(canvas, options);
-
-    this.TYPE = 3;
 
     this.chart = getRadarChart(this.ctx, this.legend, this.settings, this.root);
     this.root.addChild(this.chart);

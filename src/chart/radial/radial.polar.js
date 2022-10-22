@@ -1,68 +1,68 @@
 import Radial from './radial.js';
-import { getDataLimits } from '../core/data.js';
-import { DOUBLE_PI, HALF_PI, abs, polarToCartesian } from '../core/math.js';
-import Arc from '../elements/arc.js';
-import { displayEntryDetails, getHandler } from '../core/events.js';
+import { getDataLimits } from '../../core/data.js';
+import { getBaseRadius } from '../../core/helpers.js';
+import Arc from '../../elements/arc.js';
+import { getHandler } from '../../core/events.js';
+import { displayEntryDetails } from '../../core/events.js';
+import { DOUBLE_PI, HALF_PI, THREE_QUARTER_PI, polarToCartesian } from '../../core/math.js';
 
-const getLineChart = (ctx, legend, settings, root) => {
+const getPolarChart = (ctx, legend, settings, root) => {
   const width = settings.width;
   const height = settings.height - legend.diagonal[1];
   const d = Math.min(width, height) * 0.9;
   const r = d / 2;
   const data = settings.dataset.data;
-  const absMax = Math.max(settings.limits.max, abs(settings.limits.min));
-  const lineWidth = (r / data.length) * 0.9;
-  const linePadding = (r / data.length) * 0.1;
+  const step = DOUBLE_PI / data.length;
+  const BASELINE = 20;
 
   const chart = new Arc(
     {
-      origin: [(width - d) / 2 + r, legend.diagonal[1] + r + 10],
+      origin: [(width - d) / 2 + r, legend.diagonal[1] + r + 30],
       radius: {
         inner: 0,
         outer: r,
+        base: getBaseRadius({ innter: 0, outer: r }, settings.limits),
       },
       angle: {
-        start: 0,
-        end: DOUBLE_PI,
+        start: -HALF_PI,
+        end: THREE_QUARTER_PI,
       },
       visible: false,
     },
     {
       role: 'chart',
-    },
-    {}
+    }
   );
 
-  const sa = -HALF_PI;
-  let outer = chart.radius.outer;
-  let inner = outer - lineWidth;
+  let sa = -HALF_PI;
   let ea = 0;
   let i = 0;
 
   while (i < data.length) {
-    const ratio = data[i].value / absMax;
-    ea = sa + DOUBLE_PI * ratio;
+    const ratio = data[i].value / settings.limits.distance;
+    const r = ratio * chart.radius.outer + chart.radius.base;
+    ea = sa + step;
 
     const segment = new Arc(
       {
         origin: chart.origin,
         radius: {
-          inner: inner,
-          outer: outer,
+          inner: 0,
+          outer: r,
         },
         angle: {
-          start: Math.min(sa, ea),
-          end: Math.max(sa, ea),
+          start: sa,
+          end: ea,
         },
       },
       {
-        role: 'dataEntry',
+        role: 'PolarChartSegmeng',
         value: data[i].value,
         label: data[i].label,
       },
       {
-        background: data[i].background || settings.style.data.background,
-        border: 'transparent',
+        background: data[i].style.background || settings.style.data.background,
+        border: '#fff',
       }
     );
 
@@ -78,22 +78,22 @@ const getLineChart = (ctx, legend, settings, root) => {
       root.render(ctx);
     };
 
-    i++;
-    outer -= lineWidth + linePadding;
-    inner = outer - lineWidth;
     chart.addChild(segment);
+
+    i++;
+    sa = ea;
   }
 
   return chart;
 };
 
-export default class Lines extends Radial {
+export default class Polar extends Radial {
+  TYPE = 'polar';
+
   constructor(canvas, options) {
     super(canvas, options);
 
-    this.TYPE = 2;
-
-    this.chart = getLineChart(this.ctx, this.legend, this.settings, this.root);
+    this.chart = getPolarChart(this.ctx, this.legend, this.settings, this.root);
     this.root.addChild(this.chart);
     this.root.render(this.ctx);
 
@@ -101,4 +101,4 @@ export default class Lines extends Radial {
   }
 }
 
-Lines.prototype._getDataLimits = getDataLimits;
+Polar.prototype._getDataLimits = getDataLimits;

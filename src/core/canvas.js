@@ -62,7 +62,7 @@ export const setFillStyle = (ctx, style) => (ctx.fillStyle = style);
 
 export const setStrokeStyle = (ctx, style) => (ctx.strokeStyle = style);
 
-export const setfont = (ctx, font) => (ctx.font = font);
+export const setFont = (ctx, font) => (ctx.font = font);
 
 export const setTextAlign = (ctx, value) => (ctx.textAlign = value);
 

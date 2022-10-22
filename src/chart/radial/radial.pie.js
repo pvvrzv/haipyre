@@ -1,7 +1,7 @@
 import Radial from './radial.js';
-import { DOUBLE_PI, HALF_PI, THREE_QUARTER_PI, abs, polarToCartesian } from '../core/math.js';
-import Arc from '../elements/arc.js';
-import { getHandler, displayEntryDetails } from '../core/events.js';
+import { DOUBLE_PI, HALF_PI, THREE_QUARTER_PI, abs, polarToCartesian } from '../../core/math.js';
+import Arc from '../../elements/arc.js';
+import { getHandler, displayEntryDetails } from '../../core/events.js';
 
 const INNER_TO_OUTER_RADIUS_RATIO = 0.3;
 
@@ -56,7 +56,7 @@ const getPieChart = (legend, settings, ctx, root) => {
         label: data[i].label,
       },
       {
-        background: data[i].background || settings.style.data.background,
+        background: data[i].style.background || settings.style.data.background,
         border: '#fff',
       }
     );
@@ -83,10 +83,10 @@ const getPieChart = (legend, settings, ctx, root) => {
 };
 
 export default class Pie extends Radial {
+  TYPE = 'pie';
+
   constructor(canvas, options) {
     super(canvas, options);
-
-    this.settings.TYPE = '1';
 
     this.settings.sum = this.settings.dataset.data.reduce((a, b) => a + abs(b.val), 0);
     this.chart = getPieChart(this.legend, this.settings, this.ctx, this.root);

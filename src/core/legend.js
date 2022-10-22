@@ -1,6 +1,8 @@
 import Rectangle from '../elements/rectangle.js';
 import Text from '../elements/text.js';
 
+
+
 const getLegendStandardSizes = (settings) => {
   const unit = {
     marker: {
@@ -37,6 +39,66 @@ const getLegendStandardSizes = (settings) => {
   };
 };
 
+const createRowElement = (origin, standard) => {
+  return new Rectangle(
+    {
+      origin: origin,
+      width: standard.width,
+      height: standard.unit.height,
+      visible: false,
+    },
+    { role: 'legendRow' }
+  );
+};
+
+const createMarkerElement = (origin, standard, dataEntry) => {
+  return new Rectangle(
+    {
+      origin: origin,
+      width: standard.unit.marker.width,
+      height: standard.unit.height,
+    },
+    {
+      role: 'legendMarker',
+    },
+    {
+      background: dataEntry.style.background || settings.style.data.backgroundAlpha,
+      border: dataEntry.style.border || dataEntry.style.background || settings.style.data.background,
+    }
+  );
+};
+
+const createTextElement = (origin, standard, content, ctx) => {
+  const measurements = ctx.measureText(content);
+  return new Text(
+    {
+      origin: [origin[0] + standard.unit.marker.width + standard.unit.text.margin.left, origin[1]],
+      width: measurements.width,
+      height: standard.unit.height,
+      content: content,
+      baseline: 'top',
+    },
+    {
+      role: 'legendLabel',
+    },
+    {
+      color: '#000',
+    }
+  );
+};
+
+const createUnitElement = (origin, standard, marker, text) => {
+  return new Rectangle(
+    {
+      origin: origin,
+      width: marker.width + standard.unit.text.margin.left + text.width,
+      height: standard.unit.height,
+      visible: false,
+    },
+    { role: 'legendUnit' }
+  );
+};
+
 export const getLegend = (ctx, settings) => {
   const data = settings.dataset.data;
   const standard = getLegendStandardSizes(settings);
@@ -56,15 +118,7 @@ export const getLegend = (ctx, settings) => {
   let carryUnit = null;
 
   while (y < standard.height && i < data.length) {
-    const row = new Rectangle(
-      {
-        origin: [x, y],
-        width: standard.width,
-        height: standard.unit.height,
-        visible: false,
-      },
-      { role: 'legendRow' }
-    );
+    const row = createRowElement([x, y], standard);
 
     if (carryUnit) {
       carryUnit.translate(-(carryUnit.origin[0] - x), y - carryUnit.origin[1]);
@@ -75,46 +129,12 @@ export const getLegend = (ctx, settings) => {
 
     while (i < data.length) {
       const dataUnit = data[i];
-      const textMeasurements = ctx.measureText(dataUnit.label);
 
-      const marker = new Rectangle(
-        {
-          origin: [x, y],
-          width: standard.unit.marker.width,
-          height: standard.unit.height,
-        },
-        { role: 'legendMarker' },
-        {
-          background: dataUnit.background || settings.style.data.backgroundAlpha,
-          border: dataUnit.border || dataUnit.background || settings.style.data.background,
-        }
-      );
+      const marker = createMarkerElement([x, y], standard, dataUnit);
 
-      const text = new Text(
-        {
-          origin: [x + marker.width + standard.unit.text.margin.left, y],
-          width: textMeasurements.width,
-          height: standard.unit.height,
-          content: dataUnit.label,
-          baseline: 'top',
-        },
-        {
-          role: 'legendLabel',
-        },
-        {
-          color: '#000',
-        }
-      );
+      const text = createTextElement([x, y], standard, dataUnit.label, ctx);
 
-      const unit = new Rectangle(
-        {
-          origin: [x, y],
-          width: marker.width + standard.unit.text.margin.left + text.width,
-          height: standard.unit.height,
-          visible: false,
-        },
-        { role: 'legendUnit' }
-      );
+      const unit = createUnitElement([x, y], standard, marker, text);
 
       unit.addShadow(marker);
       unit.addShadow(text);

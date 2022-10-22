@@ -2,7 +2,6 @@ export const DEFAULT_GLOBAL_STYLE = {
   background: 'rgb(255, 255, 255)',
   data: {
     background: 'rgb(182, 203, 222)',
-    backgroundAlpha: 'rgba(182, 203, 222, 0.3)',
     border: 'rgb(229, 231, 233)',
   },
 };

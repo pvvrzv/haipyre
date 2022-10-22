@@ -4,10 +4,11 @@ export const DEFAULT_FONT = {
   weight: 'normal',
   size: 12,
   family: ['Helvetica', 'Arial', 'sans-serif'],
+  get string() {
+    return `${this.style} ${this.variant} ${this.weight} ${this.size}px/1 ${this.family}`;
+  },
 };
 
 export const normalize = (userFont) => {
-  const font = Object.assign(DEFAULT_FONT, userFont);
-  font.string = `${font.style} ${font.variant} ${font.weight} ${font.size}px/1 ${font.family}`;
-  return font;
+  return Object.assign(DEFAULT_FONT, userFont);
 };

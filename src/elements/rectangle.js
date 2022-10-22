@@ -17,11 +17,29 @@ export default class Rectangle extends Element {
   constructor(parameters, meta = {}, style = {}) {
     super(parameters, meta, style);
 
-    this.width = parameters.width;
-    this.height = parameters.height;
+    this._width = parameters.width;
+    this._height = parameters.height;
     this.diagonal = [0, 0];
 
     this._calculateDiagonal();
+  }
+
+  set width(width) {
+    this._width = width;
+    this._calculateDiagonal();
+  }
+
+  get width() {
+    return this._width;
+  }
+
+  set height(height) {
+    this._height = height;
+    this._calculateDiagonal();
+  }
+
+  get height() {
+    return this._height;
   }
 
   _scale(factor) {
