@@ -30,7 +30,7 @@ export const subtractVectors = (v1, v2) => {
   return [x, y];
 };
 
-export const clampNumber = (x, y) => {
+export const fractionReminder = (x, y) => {
   //same as maplesoftware's frem
   if (x === y) return x;
   return x - y * Math.floor(x / y);

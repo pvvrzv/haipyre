@@ -124,7 +124,7 @@ const createUnitElement = (origin, standard, text) => {
   );
 };
 
-export const getLegend = (ctx, data, settings) => {
+export const createLegend = (ctx, data, settings) => {
   const standard = settings.legend;
   const legend = new Rectangle(
     {

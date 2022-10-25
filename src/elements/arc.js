@@ -1,5 +1,5 @@
 import Element from './abstract.js';
-import { TAU, HALF_PI, getVectorAngle, subtractVectors, clampNumber } from '../core/math.js';
+import { TAU, HALF_PI, getVectorAngle, subtractVectors, fractionReminder } from '../core/math.js';
 import {
   beginPath,
   fill,
@@ -17,11 +17,12 @@ export default class Arc extends Element {
   constructor(parameters, meta = {}, style = {}) {
     super(parameters, meta, style);
 
-    this.angle = {
-      start: parameters.angle.start,
-      end: parameters.angle.end,
-      diff: clampNumber(parameters.angle.end - parameters.angle.start, TAU),
-    };
+    this.angle = {};
+
+    [this.angle.start, this.angle.end] = parameters.counterclockwise
+      ? [parameters.angle.end, parameters.angle.start]
+      : [parameters.angle.start, parameters.angle.end];
+    this.angle.diff = fractionReminder(this.angle.end - this.angle.start, TAU);
 
     this.radius = parameters.radius;
   }
@@ -51,7 +52,7 @@ export default class Arc extends Element {
   }
 
   intersectsAngle(angle) {
-    const alpha = clampNumber(this.angle.end - angle, TAU);
+    const alpha = fractionReminder(this.angle.end - angle, TAU);
     return alpha <= this.angle.diff;
   }
 

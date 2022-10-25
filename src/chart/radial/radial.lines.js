@@ -4,19 +4,19 @@ import { TAU, HALF_PI, abs, polarToCartesian } from '../../core/math.js';
 import Arc from '../../elements/arc.js';
 import { displayEntryDetails, getHandler } from '../../core/events.js';
 
-const getLineChart = (ctx, dataset, legend, settings, root) => {
-  const width = settings.width;
-  const height = settings.height - legend.diagonal[1];
+const createLineChart = (chart) => {
+  const width = chart.settings.width;
+  const height = chart.settings.height - chart.legend.diagonal[1];
   const d = Math.min(width, height) * 0.9;
   const r = d / 2;
-  const data =  dataset.data;
-  const absMax = Math.max(settings.limits.max, abs(settings.limits.min));
+  const data = chart.dataset.data;
+  const absMax = Math.max(chart.settings.limits.max, abs(chart.settings.limits.min));
   const lineWidth = (r / data.length) * 0.9;
   const linePadding = (r / data.length) * 0.1;
 
-  const chart = new Arc(
+  const _chart = new Arc(
     {
-      origin: [(width - d) / 2 + r, legend.diagonal[1] + r + 10],
+      origin: [(width - d) / 2 + r, chart.legend.diagonal[1] + r + 10],
       radius: {
         inner: 0,
         outer: r,
@@ -34,7 +34,7 @@ const getLineChart = (ctx, dataset, legend, settings, root) => {
   );
 
   const sa = -HALF_PI;
-  let outer = chart.radius.outer;
+  let outer = _chart.radius.outer;
   let inner = outer - lineWidth;
   let ea = 0;
   let i = 0;
@@ -45,15 +45,16 @@ const getLineChart = (ctx, dataset, legend, settings, root) => {
 
     const segment = new Arc(
       {
-        origin: chart.origin,
+        origin: _chart.origin,
         radius: {
           inner: inner,
           outer: outer,
         },
         angle: {
-          start: Math.min(sa, ea),
-          end: Math.max(sa, ea),
+          start: sa,
+          end: ea,
         },
+        counterclockwise: ea < sa,
       },
       {
         role: 'dataEntry',
@@ -61,7 +62,7 @@ const getLineChart = (ctx, dataset, legend, settings, root) => {
         label: data[i].label,
       },
       {
-        background: data[i].style.background || settings.style.data.background,
+        background: data[i].style.background || chart.settings.style.data.background,
         border: 'transparent',
       }
     );
@@ -70,21 +71,21 @@ const getLineChart = (ctx, dataset, legend, settings, root) => {
       const median = (segment.angle.start + segment.angle.end) / 2;
       const middle = (segment.radius.inner + segment.radius.outer) / 2;
       const center = polarToCartesian(median, segment.origin, [middle])[0];
-      displayEntryDetails(ctx, center, segment, settings.font);
+      displayEntryDetails(chart.ctx, center, segment, chart.settings.font);
     };
 
     segment.onMouseLeave = () => {
-      root.clear(ctx);
-      root.render(ctx);
+      chart.root.clear(chart.ctx);
+      chart.root.render(chart.ctx);
     };
 
     i++;
     outer -= lineWidth + linePadding;
     inner = outer - lineWidth;
-    chart.addChild(segment);
+    _chart.addChild(segment);
   }
 
-  return chart;
+  return _chart;
 };
 
 export default class Lines extends Radial {
@@ -92,13 +93,8 @@ export default class Lines extends Radial {
 
   constructor(canvas, dataset, parameters) {
     super(canvas, dataset, parameters);
-
-    this.chart = getLineChart(this.ctx, this.dataset, this.legend, this.settings, this.root);
-    this.root.addChild(this.chart);
-    this.root.render(this.ctx);
-
-    this.canvas.addEventListener('mousemove', getHandler(this.root));
   }
 }
 
 Lines.prototype._getDataLimits = getDataLimits;
+Lines.prototype._createChart = createLineChart;

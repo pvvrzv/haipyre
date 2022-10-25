@@ -5,16 +5,16 @@ import { getHandler, displayEntryDetails } from '../../core/events.js';
 
 const INNER_TO_OUTER_RADIUS_RATIO = 0.3;
 
-const getPieChart = (legend, dataset, settings, ctx, root) => {
-  const width = settings.width;
-  const height = settings.height - legend.diagonal[1];
+const createPieChart = (chart) => {
+  const width = chart.settings.width;
+  const height = chart.settings.height - chart.legend.diagonal[1];
   const d = Math.min(width, height) * 0.9;
   const r = d / 2;
-  const data = dataset;
+  const data = chart.dataset.data;
 
-  const chart = new Arc(
+  const _chart = new Arc(
     {
-      origin: [(width - d) / 2 + r, legend.diagonal[1] + r + 10],
+      origin: [(width - d) / 2 + r, chart.legend.diagonal[1] + r + 10],
       radius: {
         inner: r * INNER_TO_OUTER_RADIUS_RATIO,
         outer: r,
@@ -35,15 +35,15 @@ const getPieChart = (legend, dataset, settings, ctx, root) => {
   let i = 0;
 
   while (i < data.length) {
-    const ratio = abs(data[i].value) / settings.limits.sum;
+    const ratio = abs(data[i].value) / chart.settings.limits.sum;
     ea = sa + TAU * ratio;
 
     const segment = new Arc(
       {
-        origin: chart.origin,
+        origin: _chart.origin,
         radius: {
-          inner: chart.radius.outer * INNER_TO_OUTER_RADIUS_RATIO,
-          outer: chart.radius.outer,
+          inner: _chart.radius.outer * INNER_TO_OUTER_RADIUS_RATIO,
+          outer: _chart.radius.outer,
         },
         angle: {
           start: sa,
@@ -56,8 +56,8 @@ const getPieChart = (legend, dataset, settings, ctx, root) => {
         label: data[i].label,
       },
       {
-        background: data[i].style.background || settings.style.data.background,
-        border: settings.style.background,
+        background: data[i].style.background || chart.settings.style.data.background,
+        border: chart.settings.style.background,
       }
     );
 
@@ -65,21 +65,21 @@ const getPieChart = (legend, dataset, settings, ctx, root) => {
       const median = (segment.angle.start + segment.angle.end) / 2;
       const middle = (segment.radius.inner + segment.radius.outer) / 2;
       const center = polarToCartesian(median, segment.origin, [middle])[0];
-      displayEntryDetails(ctx, center, segment, settings.font);
+      displayEntryDetails(chart.ctx, center, segment, chart.settings.font);
     };
 
     segment.onMouseLeave = () => {
-      root.clear(ctx);
-      root.render(ctx);
+      chart.root.clear(chart.ctx);
+      chart.root.render(chart.ctx);
     };
 
-    chart.addChild(segment);
+    _chart.addChild(segment);
 
     sa = ea;
     i++;
   }
 
-  return chart;
+  return _chart;
 };
 
 export default class Pie extends Radial {
@@ -87,19 +87,12 @@ export default class Pie extends Radial {
 
   constructor(canvas, dataset, parameters) {
     super(canvas, dataset, parameters);
-
-    this.settings.sum = data.dataset.reduce((a, b) => a + abs(b.val), 0);
-    this.chart = getPieChart(this.legend, this.data.dataset, this.settings, this.ctx, this.root);
-    this.root.addChild(this.chart);
-    this.root.render(this.ctx);
-
-    this.canvas.addEventListener('mousemove', getHandler(this.root));
   }
 }
 
 Pie.prototype._getDataLimits = (dataset) => {
-  const sum = dataset.reduce((a, e) => a + abs(e.value), 0);
   return {
-    sum,
+    sum: dataset.data.reduce((a, b) => a + abs(b.value), 0),
   };
 };
+Pie.prototype._createChart = createPieChart;
