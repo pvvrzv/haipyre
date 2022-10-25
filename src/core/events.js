@@ -36,7 +36,7 @@ export const getHandler = (target) => {
   };
 };
 
-export const displayEntryDetails = (ctx, origin, entry, font, position = 'top') => {
+export const displayEntryDetails = (ctx, origin, entry, position = 'top') => {
   const text = `${entry.meta.label}: ${entry.meta.value}`;
   const textMeasurements = ctx.measureText(text);
 

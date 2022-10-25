@@ -1,15 +1,15 @@
 import Radial from './radial.js';
 import { getDataLimits } from '../../core/data.js';
-import { DOUBLE_PI, HALF_PI, abs, polarToCartesian } from '../../core/math.js';
+import { TAU, HALF_PI, abs, polarToCartesian } from '../../core/math.js';
 import Arc from '../../elements/arc.js';
 import { displayEntryDetails, getHandler } from '../../core/events.js';
 
-const getLineChart = (ctx, legend, settings, root) => {
+const getLineChart = (ctx, dataset, legend, settings, root) => {
   const width = settings.width;
   const height = settings.height - legend.diagonal[1];
   const d = Math.min(width, height) * 0.9;
   const r = d / 2;
-  const data = settings.dataset.data;
+  const data =  dataset.data;
   const absMax = Math.max(settings.limits.max, abs(settings.limits.min));
   const lineWidth = (r / data.length) * 0.9;
   const linePadding = (r / data.length) * 0.1;
@@ -23,7 +23,7 @@ const getLineChart = (ctx, legend, settings, root) => {
       },
       angle: {
         start: 0,
-        end: DOUBLE_PI,
+        end: TAU,
       },
       visible: false,
     },
@@ -41,7 +41,7 @@ const getLineChart = (ctx, legend, settings, root) => {
 
   while (i < data.length) {
     const ratio = data[i].value / absMax;
-    ea = sa + DOUBLE_PI * ratio;
+    ea = sa + TAU * ratio;
 
     const segment = new Arc(
       {
@@ -90,10 +90,10 @@ const getLineChart = (ctx, legend, settings, root) => {
 export default class Lines extends Radial {
   TYPE = 'lines';
 
-  constructor(canvas, options) {
-    super(canvas, options);
+  constructor(canvas, dataset, parameters) {
+    super(canvas, dataset, parameters);
 
-    this.chart = getLineChart(this.ctx, this.legend, this.settings, this.root);
+    this.chart = getLineChart(this.ctx, this.dataset, this.legend, this.settings, this.root);
     this.root.addChild(this.chart);
     this.root.render(this.ctx);
 

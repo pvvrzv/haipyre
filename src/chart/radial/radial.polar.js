@@ -4,15 +4,15 @@ import { getBaseRadius } from '../../core/helpers.js';
 import Arc from '../../elements/arc.js';
 import { getHandler } from '../../core/events.js';
 import { displayEntryDetails } from '../../core/events.js';
-import { DOUBLE_PI, HALF_PI, THREE_QUARTER_PI, polarToCartesian } from '../../core/math.js';
+import { TAU, HALF_PI, THREE_HALVES_PI, polarToCartesian } from '../../core/math.js';
 
-const getPolarChart = (ctx, legend, settings, root) => {
+const getPolarChart = (ctx, dataset, legend, settings, root) => {
   const width = settings.width;
   const height = settings.height - legend.diagonal[1];
   const d = Math.min(width, height) * 0.9;
   const r = d / 2;
-  const data = settings.dataset.data;
-  const step = DOUBLE_PI / data.length;
+  const data = dataset.data;
+  const step = TAU / data.length;
   const BASELINE = 20;
 
   const chart = new Arc(
@@ -25,7 +25,7 @@ const getPolarChart = (ctx, legend, settings, root) => {
       },
       angle: {
         start: -HALF_PI,
-        end: THREE_QUARTER_PI,
+        end: THREE_HALVES_PI,
       },
       visible: false,
     },
@@ -90,10 +90,10 @@ const getPolarChart = (ctx, legend, settings, root) => {
 export default class Polar extends Radial {
   TYPE = 'polar';
 
-  constructor(canvas, options) {
-    super(canvas, options);
+  constructor(canvas, dataset, parameters) {
+    super(canvas, dataset, parameters);
 
-    this.chart = getPolarChart(this.ctx, this.legend, this.settings, this.root);
+    this.chart = getPolarChart(this.ctx, this.dataset, this.legend, this.settings, this.root);
     this.root.addChild(this.chart);
     this.root.render(this.ctx);
 

@@ -1,39 +1,46 @@
 import { setCanvas, setFont } from '../core/canvas.js';
 import { getGlobalStyle } from '../core/style.js';
-import { normalize as normalizeFont } from '../core/font.js';
+import { normalizeFont } from '../core/font.js';
 import { getLegend } from '../core/legend.js';
 import Rectangle from '../elements/rectangle.js';
+import { getLegendSettings } from '../core/legend.js';
+
+function createRoot(settings) {
+  return new Rectangle(
+    {
+      origin: [0, 0],
+      width: settings.width,
+      height: settings.height,
+    },
+    {
+      role: 'drawingArea',
+    },
+    {
+      background: settings.style.background,
+      border: 'transparent',
+    }
+  );
+}
 
 export default class Chart {
-  constructor(canvas, options) {
-    this.settings = Object.assign({}, options);
+  constructor(canvas, dataset, parameters) {
+    this.settings = {};
 
+    this.dataset = dataset;
     this.canvas = canvas;
     this.ctx = canvas.getContext('2d');
-
     this.settings.dpr = window.devicePixelRatio || 1;
-    this.settings.limits = this._getDataLimits(options.dataset);
     [this.settings.width, this.settings.height] = setCanvas(this.canvas, this.ctx, this.settings);
-    this.settings.style = getGlobalStyle(options.style);
-    this.settings.font = normalizeFont(options.font);
-    setFont(this.ctx, this.settings.font.string);
 
-    this.root = new Rectangle(
-      {
-        origin: [0, 0],
-        width: this.settings.width,
-        height: this.settings.height,
-      },
-      {
-        role: 'drawingArea',
-      },
-      {
-        background: this.settings.style.background,
-        border: 'transparent',
-      }
-    );
+    this.settings.font = normalizeFont(parameters.font, this.ctx);
 
-    this.legend = getLegend(this.ctx, this.settings);
+    this.settings.limits = this._getDataLimits(this.dataset);
+    this.settings.style = getGlobalStyle(parameters.style);
+    this.settings.legend = getLegendSettings(this.settings, parameters);
+
+    this.root = createRoot(this.settings);
+
+    this.legend = getLegend(this.ctx, this.dataset.data, this.settings);
     this.root.addChild(this.legend);
   }
 

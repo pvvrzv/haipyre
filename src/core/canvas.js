@@ -1,13 +1,12 @@
-import { DOUBLE_PI, polarToCartesian } from '../core/math.js';
+import { TAU, polarToCartesian } from '../core/math.js';
 
 export const renderCircle = (ctx, coordinates, r) => {
-  ctx.arc(...coordinates, r, 0, DOUBLE_PI, false);
+  ctx.arc(...coordinates, r, 0, TAU, false);
 };
 
 export const renderDiscSegment = (ctx, coordinates, r, sa, ea) => {
   ctx.moveTo(...coordinates);
   ctx.arc(...coordinates, r, sa, ea, false);
-  ctx.closePath();
 };
 
 export const renderCircleSegment = (ctx, coordinates, ro, ri, sa, ea) => {
@@ -84,8 +83,8 @@ export const clearRect = (ctx, coordinates, width, height) => ctx.clearRect(...c
 
 export const setCanvas = (canvas, ctx, settings) => {
   const DOMRect = canvas.getBoundingClientRect();
-  const width = Math.round(DOMRect.width);
-  const height = Math.round(DOMRect.height);
+  const width = DOMRect.width;
+  const height = DOMRect.height;
 
   canvas.width = width * settings.dpr;
   canvas.height = height * settings.dpr;
