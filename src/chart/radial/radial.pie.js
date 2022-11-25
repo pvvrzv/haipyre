@@ -1,7 +1,8 @@
 import Radial from './radial.js';
 import { TAU, HALF_PI, THREE_HALVES_PI, abs, polarToCartesian } from '../../core/math.js';
 import Arc from '../../elements/arc.js';
-import { getHandler, displayEntryDetails } from '../../core/events.js';
+import { prepareData } from '../../core/data.js';
+import { displayEntryDetails } from '../../events/handler.js';
 
 const INNER_TO_OUTER_RADIUS_RATIO = 0.3;
 
@@ -34,8 +35,10 @@ const createPieChart = (chart) => {
   let ea = 0;
   let i = 0;
 
+  console.log(chart.settings.data.sum.unsigned);
+
   while (i < data.length) {
-    const ratio = abs(data[i].value) / chart.settings.limits.sum;
+    const ratio = abs(data[i].value) / chart.settings.data.sum.unsigned;
     ea = sa + TAU * ratio;
 
     const segment = new Arc(
@@ -61,17 +64,17 @@ const createPieChart = (chart) => {
       }
     );
 
-    segment.onMouseEnter = () => {
+    segment.addEventListener('mouseenter', () => {
       const median = (segment.angle.start + segment.angle.end) / 2;
       const middle = (segment.radius.inner + segment.radius.outer) / 2;
       const center = polarToCartesian(median, segment.origin, [middle])[0];
       displayEntryDetails(chart.ctx, center, segment, chart.settings.font);
-    };
+    });
 
-    segment.onMouseLeave = () => {
+    segment.addEventListener('mouseleave', () => {
       chart.root.clear(chart.ctx);
       chart.root.render(chart.ctx);
-    };
+    });
 
     _chart.addChild(segment);
 
@@ -90,9 +93,5 @@ export default class Pie extends Radial {
   }
 }
 
-Pie.prototype._getDataLimits = (dataset) => {
-  return {
-    sum: dataset.data.reduce((a, b) => a + abs(b.value), 0),
-  };
-};
+Pie.prototype._prepareData = prepareData;
 Pie.prototype._createChart = createPieChart;

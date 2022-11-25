@@ -1,5 +1,5 @@
-import { beginPath, clearRect, fillRect, setFillStyle, setStrokeStyle, strokeRect } from '../core/canvas.js';
-import Element from './abstract.js';
+import { beginPath, clearRect, closePath, fillRect, setFillStyle, setStrokeStyle, strokeRect } from '../core/canvas.js';
+import Element from './element.js';
 
 // origin
 //        +-------+
@@ -94,7 +94,7 @@ export default class Rectangle extends Element {
     beginPath(ctx);
     setFillStyle(ctx, this.style.background);
     setStrokeStyle(ctx, this.style.border);
-    fillRect(ctx, this.origin, this.width, this.height);
     strokeRect(ctx, this.origin, this.width, this.height);
+    fillRect(ctx, this.origin, this.width, this.height);
   }
 }

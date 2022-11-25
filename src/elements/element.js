@@ -17,9 +17,9 @@ export default class Element extends TreeNode {
   }
 
   render(ctx) {
+    if (this.shadow) this.shadow.forEach((element) => element.render(ctx));
     if (this.visible) this._render(ctx);
     if (this.children) this.children.forEach((element) => element.render(ctx));
-    if (this.shadow) this.shadow.forEach((element) => element.render(ctx));
   }
 
   clear() {

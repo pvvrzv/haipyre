@@ -1,4 +1,14 @@
-import { beginPath, fill, fillText, rect, roundRect, setFillStyle, setTextBaseLine, moveTo, lineTo } from './canvas.js';
+import {
+  beginPath,
+  fill,
+  fillText,
+  rect,
+  roundRect,
+  setFillStyle,
+  setTextBaseLine,
+  moveTo,
+  lineTo,
+} from '../core/canvas.js';
 
 const DETAILS_POINTER_HEIGHT = 10;
 const DETAILS_PADDING = [10, 20];
@@ -9,11 +19,11 @@ const DETAILS_MARKER = {
 };
 
 export const getHandler = (target) => {
-  let flag = false;
+  let isBeingProcessed = false;
   let lastActive = target;
 
   return (e) => {
-    if (flag) return;
+    if (isBeingProcessed) return;
 
     const point = [e.offsetX, e.offsetY];
     const node = target.findLast((node) => {
@@ -22,17 +32,15 @@ export const getHandler = (target) => {
 
     requestAnimationFrame(() => {
       if (node !== lastActive) {
-        if (lastActive.onMouseLeave) lastActive.onMouseLeave();
-        if (node.onMouseEnter) {
-          node.onMouseEnter();
-        }
+        lastActive.dispatchEvent('mouseleave');
+        node.dispatchEvent('mouseenter');
         lastActive = node;
       }
 
-      flag = false;
+      isBeingProcessed = false;
     });
 
-    flag = true;
+    isBeingProcessed = true;
   };
 };
 

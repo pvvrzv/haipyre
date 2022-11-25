@@ -1,7 +1,9 @@
-import { List } from './list.js';
+import List from './list.js';
+import EventEmmiter from '../events/emitter.js';
 
-export class TreeNode {
+export class TreeNode extends EventEmmiter {
   constructor(meta, children = null, shadow = null) {
+    super();
     this.meta = meta;
     this.parent = null;
     this.children = children;
@@ -25,23 +27,8 @@ export class TreeNode {
     this.shadow.push(node);
   }
 
-  getLastChild() {
-    return this.children.pop();
-  }
-
-  getFirstChild() {
-    return this.children.unshift();
-  }
-
   clearChildren() {
     this.children = null;
-  }
-
-  hasChildren() {
-    if (this.children) {
-      return true;
-    }
-    return false;
   }
 
   findLast(predicate) {

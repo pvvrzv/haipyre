@@ -1,4 +1,4 @@
-import Element from './abstract.js';
+import Element from './element.js';
 import {
   beginPath,
   moveTo,

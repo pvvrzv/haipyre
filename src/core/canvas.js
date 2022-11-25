@@ -12,7 +12,6 @@ export const renderDiscSegment = (ctx, coordinates, r, sa, ea) => {
 export const renderCircleSegment = (ctx, coordinates, ro, ri, sa, ea) => {
   ctx.arc(...coordinates, ro, sa, ea, false);
   ctx.arc(...coordinates, ri, ea, sa, true);
-  ctx.closePath();
 };
 
 export const renderRectangle = (ctx, coordinates, width, height) => {

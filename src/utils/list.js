@@ -1,4 +1,4 @@
-export class List {
+export default class List {
   constructor() {
     this.head = null;
     this.tail = null;
@@ -94,5 +94,20 @@ export class List {
     }
 
     return;
+  }
+
+  at(i) {
+    if (!this.head) return undefined;
+    if (i > this.length - 1) return undefined;
+
+    let n = 0;
+    let node = this.head;
+    let target = i < 0 ? i + this.length : i;
+
+    for (let n = 0; n !== target; n++) {
+      node = node.next;
+    }
+
+    return node;
   }
 }

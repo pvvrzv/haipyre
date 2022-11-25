@@ -1,4 +1,4 @@
-import Element from './abstract.js';
+import Element from './element.js';
 import { TAU, HALF_PI, getVectorAngle, subtractVectors, fractionReminder } from '../core/math.js';
 import {
   beginPath,
@@ -11,20 +11,29 @@ import {
   stroke,
 } from '../core/canvas.js';
 
-const ANGLE_SHIFT = -HALF_PI;
-
 export default class Arc extends Element {
   constructor(parameters, meta = {}, style = {}) {
     super(parameters, meta, style);
 
-    this.angle = {};
-
-    [this.angle.start, this.angle.end] = parameters.counterclockwise
+    this._angle = {};
+    this.radius = parameters.radius;
+    [this._angle.start, this._angle.end] = parameters.counterclockwise
       ? [parameters.angle.end, parameters.angle.start]
       : [parameters.angle.start, parameters.angle.end];
-    this.angle.diff = fractionReminder(this.angle.end - this.angle.start, TAU);
+    this._calculateAngleDiff();
+  }
 
-    this.radius = parameters.radius;
+  set angle(angle) {
+    this._angle = angle;
+    this._calculateAngleDiff();
+  }
+
+  get angle() {
+    return this._angle;
+  }
+
+  _calculateAngleDiff() {
+    this._angle.diff = fractionReminder(this._angle.end - this._angle.start, TAU);
   }
 
   _scale(factor = 1) {
@@ -52,8 +61,8 @@ export default class Arc extends Element {
   }
 
   intersectsAngle(angle) {
-    const alpha = fractionReminder(this.angle.end - angle, TAU);
-    return alpha <= this.angle.diff;
+    const alpha = fractionReminder(this._angle.end - angle, TAU);
+    return alpha <= this._angle.diff;
   }
 
   intersectsRadius(radius) {
@@ -68,13 +77,10 @@ export default class Arc extends Element {
     if (this.radius.inner > 0) {
       renderCircleSegment(ctx, this.origin, this.radius.outer, this.radius.inner, this.angle.start, this.angle.end);
     } else {
-      if (this.angle.end === TAU) {
-        renderCircle(ctx, this.origin, this.radius.outer);
-      } else {
-        renderDiscSegment(ctx, this.origin, this.radius.outer, this.angle.start, this.angle.end);
-      }
+      renderDiscSegment(ctx, this.origin, this.radius.outer, this.angle.start, this.angle.end);
     }
-    fill(ctx);
+
     stroke(ctx);
+    fill(ctx);
   }
 }

@@ -3,7 +3,7 @@ import { getRadarDataLimits } from '../../core/data.js';
 import { getBaseRadius } from '../../core/helpers.js';
 import { TAU, HALF_PI, THREE_HALVES_PI, polarToCartesian } from '../../core/math.js';
 import Arc from '../../elements/arc.js';
-import { displayEntryDetails } from '../../core/events.js';
+import { displayEntryDetails } from '../../events/handler.js';
 
 const createRadarChart = (chart) => {
   const MARKER_RADIUS = 5;
@@ -69,15 +69,15 @@ const createRadarChart = (chart) => {
         }
       );
 
-      marker.onMouseEnter = () => {
+      marker.addEventListener('mouseenter', () => {
         displayEntryDetails(chart.ctx, marker.origin, marker, chart.settings.font);
-      };
+      });
 
-      marker.onMouseLeave = () => {
+      marker.addEventListener('mouseleave', () => {
         chart.root.clear(chart.ctx);
         chart.root.render(chart.ctx);
-      };
-
+      });
+      
       _chart.addChild(marker);
 
       angle += step;
@@ -99,5 +99,5 @@ export default class Radar extends Radial {
   }
 }
 
-Radar.prototype._getDataLimits = getRadarDataLimits;
+Radar.prototype._prepareData = getRadarDataLimits;
 Radar.prototype._createChart = createRadarChart;

@@ -1,17 +1,18 @@
-import { Pie, Lines, Radar, Polar } from './src/index.js';
+import { Pie, Lines, Radar, Polar, Bars } from './src/index.js';
 
 const canvas = document.getElementById('canvas');
 
 const data = [
-  { label: 'Jan.', value: -5, style: { background: '#35688E', border: '' } },
-  { label: 'Feb.', value: 20, style: { background: '#A2596D', border: '' } },
-  { label: 'March', value: 10, style: { background: '#5C4A72', border: '' } },
-  { label: 'Apr.', value: -5, style: { background: '#F2B05B', border: '' } },
-  { label: 'May.', value: 8, style: { background: '#F4874C', border: '' } },
-  { label: 'June', value: 3, style: { background: '#F56A4E', border: '' } },
+  { label: 'Jan.', value: -5, style: { background: '#F24452' } },
+  { label: 'Feb.', value: 20, style: { background: '#04ADBF' } },
+  { label: 'March', value: 10, style: { background: '#0D6973' } },
+  { label: 'Apr.', value: -5, style: { background: '#F2B05B' } },
+  { label: 'May.', value: 1, style: { background: '#F4874C' } },
+  { label: 'June', value: 0, style: { background: '#F95D3E' } },
 ];
 
-const radarData = [
+const markers = ['mon.', 'tue.', 'wed.', 'thu.', 'fri.', 'sut.', 'sun.'];
+const multiLevelData = [
   {
     label: 'Jan.',
     value: [-12, 1, 5, 6, 2],
@@ -26,14 +27,20 @@ const radarData = [
     },
   },
 ];
-const radarLabels = ['running', 'cycling', 'sleeping', 'walking', 'juggle'];
 
 const dataset = {
   data: data,
+  onMouseEnter: () => {
+    canvas.style.cursor = 'pointer';
+  },
+  onMouseLeave: () => {
+    canvas.style.cursor = 'initial';
+  },
 };
-const radaDataset = {
-  radarLabels: radarLabels,
-  data: radarData,
+
+const multiLevelDataset = {
+  markers: markers,
+  data: multiLevelData,
 };
 
 const parameters = {
@@ -41,8 +48,8 @@ const parameters = {
     marker: 'disk',
   },
   style: {
-    background: '#E7EBEE',
+    background: '#F5F5F5',
   },
 };
 
-const chart = new Radar(canvas, radaDataset, parameters);
+const chart = new Lines(canvas, dataset, parameters);
