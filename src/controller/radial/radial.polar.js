@@ -5,6 +5,47 @@ import Arc from '../../elements/arc.js';
 import { displayEntryDetails } from '../../events/handler.js';
 import { TAU, HALF_PI, THREE_HALVES_PI, polarToCartesian } from '../../core/math.js';
 
+const createDataEntry = (settings, _chart, chart) => {
+  const data = chart.dataset.data[settings.index];
+
+  const entry = new Arc(
+    {
+      origin: _chart.origin,
+      radius: {
+        inner: 0,
+        outer: settings.radius,
+      },
+      angle: {
+        start: settings.angle.start,
+        end: settings.angle.end,
+      },
+    },
+    {
+      role: 'dataEntry',
+      value: data.value,
+      label: data.label,
+    },
+    {
+      background: data.style.background || chart.settings.style.data.background,
+      border: chart.settings.style.background,
+    }
+  );
+
+  entry.addEventListener('mouseenter', () => {
+    const median = (entry.angle.start + entry.angle.end) / 2;
+    const middle = (entry.radius.inner + entry.radius.outer) / 2;
+    const center = polarToCartesian(median, entry.origin, [middle])[0];
+    displayEntryDetails(chart.ctx, center, entry, chart.settings.font);
+  });
+
+  entry.addEventListener('mouseleave', () => {
+    chart.root.clear(chart.ctx);
+    chart.root.render(chart.ctx);
+  });
+
+  return entry;
+};
+
 const createPolarChart = (chart) => {
   const width = chart.settings.width;
   const height = chart.settings.height - chart.legend.diagonal[1];
@@ -12,7 +53,8 @@ const createPolarChart = (chart) => {
   const r = d / 2;
   const data = chart.dataset.data;
   const step = TAU / data.length;
-  const BASELINE = 20;
+  const BASELINE_MULTYPLIER = 0.01;
+  const baseline = r * BASELINE_MULTYPLIER;
 
   const _chart = new Arc(
     {
@@ -43,42 +85,18 @@ const createPolarChart = (chart) => {
     const r = ratio * _chart.radius.outer + _chart.radius.base;
     ea = sa + step;
 
-    const segment = new Arc(
-      {
-        origin: _chart.origin,
-        radius: {
-          inner: 0,
-          outer: r,
-        },
-        angle: {
-          start: sa,
-          end: ea,
-        },
+    const settings = {
+      index: i,
+      radius: r,
+      angle: {
+        start: sa,
+        end: ea,
       },
-      {
-        role: 'PolarChartSegmeng',
-        value: data[i].value,
-        label: data[i].label,
-      },
-      {
-        background: data[i].style.background || chart.settings.style.data.background,
-        border: chart.settings.style.background,
-      }
-    );
-    
-    segment.addEventListener('mouseenter', () => {
-      const median = (segment.angle.start + segment.angle.end) / 2;
-      const middle = (segment.radius.inner + segment.radius.outer) / 2;
-      const center = polarToCartesian(median, segment.origin, [middle])[0];
-      displayEntryDetails(chart.ctx, center, segment, chart.settings.font);
-    });
+    };
 
-    segment.addEventListener('mouseleave', () => {
-      chart.root.clear(chart.ctx);
-      chart.root.render(chart.ctx);
-    });
+    const entry = createDataEntry(settings, _chart, chart);
 
-    _chart.addChild(segment);
+    _chart.addChild(entry);
 
     i++;
     sa = ea;

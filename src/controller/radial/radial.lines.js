@@ -4,10 +4,10 @@ import { TAU, HALF_PI, abs, polarToCartesian, clampNumber, isInSegment } from '.
 import Arc from '../../elements/arc.js';
 import { displayEntryDetails } from '../../events/handler.js';
 
-const createBackground = (settings, _chart) => {
+const createBackground = (settings, chart) => {
   return new Arc(
     {
-      origin: _chart.origin,
+      origin: chart.origin,
       radius: settings.radius,
       angle: {
         start: 0,
@@ -43,13 +43,13 @@ const createPlug = (settings, entry, origin) => {
   );
 };
 
-const createVisualEntry = (settings, _chart, entry) => {
+const createVisualEntry = (settings, chart, entry) => {
   const visualSa = settings.angle.start + settings.half_e * settings.ratioSign;
   const visualEa = settings.angle.end - settings.half_e * settings.ratioSign;
 
   const visual = new Arc(
     {
-      origin: _chart.origin,
+      origin: chart.origin,
       radius: settings.radius,
       angle: {
         start: visualSa,
@@ -64,8 +64,8 @@ const createVisualEntry = (settings, _chart, entry) => {
     }
   );
 
-  const startPlugOrigin = polarToCartesian(visual.angle.start, _chart.origin, [settings.radius.middle])[0];
-  const endPlugOrigin = polarToCartesian(visual.angle.end, _chart.origin, [settings.radius.middle])[0];
+  const startPlugOrigin = polarToCartesian(visual.angle.start, chart.origin, [settings.radius.middle])[0];
+  const endPlugOrigin = polarToCartesian(visual.angle.end, chart.origin, [settings.radius.middle])[0];
   const plug_start = createPlug(settings, entry, startPlugOrigin);
   const plug_end = createPlug(settings, entry, endPlugOrigin);
 
@@ -75,12 +75,12 @@ const createVisualEntry = (settings, _chart, entry) => {
   return visual;
 };
 
-const createDataEntry = (settings, _chart, chart) => {
-  const data = chart.dataset.data[settings.index];
+const createDataEntry = (settings, chart, controller) => {
+  const data = controller.dataset.data[settings.index];
 
   const entry = new Arc(
     {
-      origin: _chart.origin,
+      origin: chart.origin,
       radius: settings.radius,
       angle: {
         start: settings.angle.start,
@@ -95,7 +95,7 @@ const createDataEntry = (settings, _chart, chart) => {
       label: data.label,
     },
     {
-      background: data.style.background || chart.settings.style.data.background,
+      background: data.style.background || controller.settings.style.data.background,
       border: 'transparent',
     }
   );
@@ -104,15 +104,15 @@ const createDataEntry = (settings, _chart, chart) => {
     const median = (entry.angle.start + entry.angle.end) / 2;
     const middle = (entry.radius.inner + entry.radius.outer) / 2;
     const center = polarToCartesian(median, entry.origin, [middle])[0];
-    displayEntryDetails(chart.ctx, center, entry, chart.settings.font);
+    displayEntryDetails(controller.ctx, center, entry, controller.settings.font);
   });
   entry.addEventListener('mouseleave', () => {
-    chart.root.clear(chart.ctx);
-    chart.root.render(chart.ctx);
+    controller.root.clear(controller.ctx);
+    controller.root.render(controller.ctx);
   });
 
-  if (chart.dataset.onMouseEnter) entry.addEventListener('mouseenter', chart.dataset.onMouseEnter);
-  if (chart.dataset.onMouseLeave) entry.addEventListener('mouseleave', chart.dataset.onMouseLeave);
+  if (controller.dataset.onMouseEnter) entry.addEventListener('mouseenter', controller.dataset.onMouseEnter);
+  if (controller.dataset.onMouseLeave) entry.addEventListener('mouseleave', controller.dataset.onMouseLeave);
 
   if (settings.ratio === 1) {
     entry.angle = {
@@ -123,7 +123,7 @@ const createDataEntry = (settings, _chart, chart) => {
     return entry;
   }
 
-  const background = createBackground(settings, _chart);
+  const background = createBackground(settings, chart);
   entry.addShadow(background);
 
   if (settings.ratio === 0) {
@@ -134,26 +134,26 @@ const createDataEntry = (settings, _chart, chart) => {
     return entry;
   }
 
-  const visual = createVisualEntry(settings, _chart, entry);
+  const visual = createVisualEntry(settings, chart, entry);
   entry.addShadow(visual);
 
   return entry;
 };
 
-const createLineChart = (chart) => {
-  const width = chart.settings.width;
-  const height = chart.settings.height - chart.legend.diagonal[1];
+const createLineChart = (controller) => {
+  const width = controller.settings.width;
+  const height = controller.settings.height - controller.legend.diagonal[1];
   const d = Math.min(width, height) * 0.9;
   const r = d / 2;
-  const data = chart.dataset.data;
+  const data = controller.dataset.data;
   const lineWidthMultiplyer = 0.7;
   const linePaddingMultiplyer = 1 - lineWidthMultiplyer;
   const lineWidth = (r / data.length) * lineWidthMultiplyer;
   const paddingWidth = (r / data.length) * linePaddingMultiplyer;
 
-  const _chart = new Arc(
+  const chart = new Arc(
     {
-      origin: [(width - d) / 2 + r, chart.legend.diagonal[1] + r + 10],
+      origin: [(width - d) / 2 + r, controller.legend.diagonal[1] + r + 10],
       radius: {
         inner: 0,
         outer: r,
@@ -180,7 +180,7 @@ const createLineChart = (chart) => {
     const r2 = 2 * middle ** 2;
     const e = Math.acos((r2 - lineWidth ** 2) / r2);
     const half_e = e / 2;
-    const ratio = data[i].value / chart.settings.data.limits.absMax;
+    const ratio = data[i].value / controller.settings.data.limits.absMax;
     const ratioSign = Math.sign(ratio);
     const counterclockwise = ratio < 0;
     const ea = sa + half_e * ratioSign + (TAU - e) * ratio;
@@ -205,13 +205,13 @@ const createLineChart = (chart) => {
       counterclockwise,
     };
 
-    const entry = createDataEntry(entrySettings, _chart, chart);
+    const entry = createDataEntry(entrySettings, chart, controller);
 
     i++;
-    _chart.addChild(entry);
+    chart.addChild(entry);
   }
 
-  return _chart;
+  return chart;
 };
 
 export default class Lines extends Radial {

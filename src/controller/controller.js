@@ -23,7 +23,7 @@ function createRoot(settings) {
   );
 }
 
-export default class Chart {
+export default class Controller {
   constructor(canvas, dataset, parameters) {
     this.settings = {};
 

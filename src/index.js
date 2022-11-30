@@ -1,7 +1,7 @@
-import Pie from './chart/radial/radial.pie.js';
-import Lines from './chart/radial/radial.lines.js';
-import Polar from './chart/radial/radial.polar.js';
-import Radar from './chart/radial/radial.radar.js';
-import Bars from './chart/orthogonal/orthogonal.bars.js';
+import Pie from './controller/radial/radial.pie.js';
+import Lines from './controller/radial/radial.lines.js';
+import Polar from './controller/radial/radial.polar.js';
+import Radar from './controller/radial/radial.radar.js';
+import Bars from './controller/orthogonal/orthogonal.bars.js';
 
 export { Pie, Lines, Polar, Radar, Bars };

@@ -1,4 +1,4 @@
-import Chart from '../chart.js';
+import Controller from '../controller.js';
 import { getRadarDataLimits } from '../../core/data.js';
 import Rectangle from '../../elements/rectangle.js';
 
@@ -16,7 +16,7 @@ function getBarsChart(chart) {
   return _chart;
 }
 
-export default class Bars extends Chart {
+export default class Bars extends Controller {
   constructor(canvas, dataset, options) {
     super(canvas, dataset, options);
   }

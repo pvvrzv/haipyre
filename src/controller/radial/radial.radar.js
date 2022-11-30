@@ -5,23 +5,23 @@ import { TAU, HALF_PI, THREE_HALVES_PI, polarToCartesian } from '../../core/math
 import Arc from '../../elements/arc.js';
 import { displayEntryDetails } from '../../events/handler.js';
 
-const createRadarChart = (chart) => {
+const createRadarChart = (controller) => {
   const MARKER_RADIUS = 5;
   const MARKER_DIAMETER = MARKER_RADIUS * 2;
-  const width = chart.settings.width;
-  const height = chart.settings.height - chart.legend.diagonal[1];
+  const width = controller.settings.width;
+  const height = controller.settings.height - controller.legend.diagonal[1];
   const d = Math.min(width, height) * 0.9;
   const r = d / 2;
-  const step = TAU / chart.dataset.radarLabels.length;
-  const data = chart.dataset.data;
+  const step = TAU / controller.dataset.radarLabels.length;
+  const data = controller.dataset.data;
 
-  const _chart = new Arc(
+  const chart = new Arc(
     {
-      origin: [(width - d) / 2 + r, chart.legend.diagonal[1] + r + 10],
+      origin: [(width - d) / 2 + r, controller.legend.diagonal[1] + r + 10],
       radius: {
         inner: 0,
         outer: r,
-        base: getBaseRadius({ inner: 0, outer: r }, chart.settings.limits),
+        base: getBaseRadius({ inner: 0, outer: r }, controller.settings.limits),
       },
       angle: {
         start: -HALF_PI,
@@ -40,11 +40,11 @@ const createRadarChart = (chart) => {
   while (i < data.length) {
     let angle = -HALF_PI;
 
-    while (j < chart.dataset.radarLabels.length) {
+    while (j < controller.dataset.radarLabels.length) {
       const dataUnit = data[i];
-      const ratio = dataUnit.value[j] / chart.settings.limits.distance;
-      const r = ratio * _chart.radius.outer + _chart.radius.base;
-      const coordinates = polarToCartesian(angle, _chart.origin, [r]);
+      const ratio = dataUnit.value[j] / controller.settings.limits.distance;
+      const r = ratio * chart.radius.outer + chart.radius.base;
+      const coordinates = polarToCartesian(angle, chart.origin, [r]);
 
       const marker = new Arc(
         {
@@ -70,15 +70,15 @@ const createRadarChart = (chart) => {
       );
 
       marker.addEventListener('mouseenter', () => {
-        displayEntryDetails(chart.ctx, marker.origin, marker, chart.settings.font);
+        displayEntryDetails(controller.ctx, marker.origin, marker, controller.settings.font);
       });
 
       marker.addEventListener('mouseleave', () => {
-        chart.root.clear(chart.ctx);
-        chart.root.render(chart.ctx);
+        controller.root.clear(controller.ctx);
+        controller.root.render(controller.ctx);
       });
-      
-      _chart.addChild(marker);
+
+      chart.addChild(marker);
 
       angle += step;
       j++;
@@ -88,7 +88,7 @@ const createRadarChart = (chart) => {
     i++;
   }
 
-  return _chart;
+  return chart;
 };
 
 export default class Radar extends Radial {
